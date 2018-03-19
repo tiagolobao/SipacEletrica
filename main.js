@@ -12,6 +12,11 @@
 
 (function() {
 
+   /*********************
+      CONSTANTES
+   **********************/
+   // Endereço em que a busica de OS para se alterar para "concluida" é feita
+   const enderecoBuscaOsPreBusca = "https://sipac.ufba.br/sipac/buscaOS.do?acao=3&tipo=11&aba=manutencao-menusupinfra";
 
    /******************************************
       CÓDIGO PARA A PÁGINA PRINCIPAL DO SIPAC
@@ -41,14 +46,14 @@
          sessionStorage.setItem("requisit",input);
          sessionStorage.setItem("acessos",0);
          sessionStorage.setItem("passo",0);
-         window.location.href = "https://sipac.ufba.br/sipac/buscaOS.do?acao=3&tipo=11&aba=manutencao-menusupinfra";
+         window.location.href = enderecoBuscaOsPreBusca;
       });
    }
 
    /*************************************************************************
          CÓDIGO PARA A PÁGINA CONSULTA OS CASO TENHA CLICADO PARA FINALIZAR
    *************************************************************************/
-   else if (window.location.href == "https://sipac.ufba.br/sipac/buscaOS.do?acao=3&tipo=11&aba=manutencao-menusupinfra"  ||  window.location.pathname.indexOf("populaOS") > -1){
+   else if (window.location.href == enderecoBuscaOsPreBusca  ||  window.location.pathname.indexOf("populaOS") > -1){
       /* Realizando uma nova busca de OS */
       var requisit = new Array();
       var acess = sessionStorage.getItem("acessos");
