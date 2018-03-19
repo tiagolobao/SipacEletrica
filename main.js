@@ -81,8 +81,7 @@
       }
       /* Caso não exista mais requisições a serem finalizadas */
       else{
-         sessionStorage.setItem("requisit",'');
-         sessionStorage.setItem("access",0);
+         storage.clear();
          alert("As requisições foram finalizadas");
       }
    }
