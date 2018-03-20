@@ -116,5 +116,26 @@
       });
    }
 
+   /*************************************************************************
+         CÓDIGO PARA FAZER AS ALTERAÇÕES NECESSÁRIAS NA ORDEM DE SERVIÇO
+         OBS: Essa parte do código acaba rodando tanto na hora do
+         formulário de alteração da OS, quanto na parte em que pode ser feita a
+         impressão da OS.
+   *************************************************************************/
+   if (window.location.pathname.indexOf("cadastraOS") > -1){
+
+      //Verifica se está em processo de finalização de OS
+      let processoFinalizaAuto = sessionStorage.getItem("processoFinalizaAuto");
+      if(processoFinalizaAuto){
+         jQuery('[id="ordemServicoForm:statusOrdemServico"]').val('1'); //Muda o status para concluída
+         jQuery("textarea[name='ordemServicoForm:j_id_jsp_2030603547_110']").val("Serviço executado."); //Muda o Diagnostico de Vistoria
+
+         /*
+         Esse ação acaba funcionando por coincidencia para clicar no botão "Alterar" e no "Alterar Outra Ordem de Serviço"
+         */
+         setTimeout(function(){ jQuery( "tfoot > tr > td > input:nth-child(1)" ).click(); }, 2500);
+      }
+   }
+
   console.log("adieu");
 })();
