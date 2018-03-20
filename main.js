@@ -138,5 +138,37 @@
       }
    }
 
+
+
+
+   /*********************************************************************************************
+                             SEGUNDA PARTE DA FINALIZAÇÃO AUTOMATICA
+                           MUDAR DE EM ROTA VISITA PARA SERVIÇO EXECUTADO
+   *********************************************************************************************/
+
+   /*
+   Função de redirecionamento para págida das ordens de serviço classificadas como "Em Rota Visita"
+   Funciona apenas na página principal (https://sipac.ufba.br/sipac/supinfra/index.jsf)
+   */
+   function abrirPaginaEmRotaVisita(){
+      var a=function(){
+         setAba('manutencao-menusupinfra');
+      };
+      var b=function(){
+         if(typeof jsfcljs == 'function'){
+            jsfcljs(
+               document.getElementById('infraForm'),
+               {'infraForm:rotaVisita':'infraForm:rotaVisita','operacao':'2'},
+               ''
+            );
+         }
+         return false;
+      };
+      return (a()==false) ? false : b();
+   }
+
+
+
+
   console.log("adieu");
 })();
