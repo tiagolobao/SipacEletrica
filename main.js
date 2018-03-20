@@ -7,11 +7,10 @@
 // @match https://sipac.ufba.br/*
 // @grant none
 // @require http://code.jquery.com/jquery-latest.js
-// @require https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.2.61/jspdf.min.js
 // ==/UserScript==
 
 (function() {
-
+   'use strict';
    /*********************
       CONSTANTES
    **********************/
