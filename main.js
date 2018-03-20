@@ -16,7 +16,8 @@
    **********************/
    // Endereço em que a busica de OS para se alterar para "concluida" é feita
    const enderecoBuscaOsPreBusca = "https://sipac.ufba.br/sipac/buscaOS.do?acao=3&tipo=11&aba=manutencao-menusupinfra";
-
+   // Endereço da página principal
+   const enderecoPaginaPrincipal = "https://sipac.ufba.br/sipac/supinfra/index.jsf";
    /******************************************
       CÓDIGO PARA A PÁGINA PRINCIPAL DO SIPAC
    *********************************************/
