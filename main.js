@@ -76,7 +76,7 @@
          }
 
          /* Caso ainda existam requisições a serem finalizadas */
-         if(acess<=requisit.length){
+         if(acess<requisit.length){
             var barra;
             sessionStorage.setItem("acessos",acess+1);
             for(i=0;i<=requisit[acess].length;i++){
