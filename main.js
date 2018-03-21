@@ -101,7 +101,7 @@
    /*************************************************************************
          CÓDIGO PARA CLICAR EM ALTERAR OS CASO ESTEJA NO PROCESSO DE FINALIZAÇÃO AUTOMATICA
    *************************************************************************/
-   if (window.location.pathname.indexOf("buscaOS") > -1){
+   else if (window.location.pathname.indexOf("buscaOS") > -1){
          //Espera a página terminar de carregar
          jQuery(document).ready( function() {
             /* Confere se é o momento certo de clicar para alterar a OS
@@ -123,7 +123,7 @@
          formulário de alteração da OS, quanto na parte em que pode ser feita a
          impressão da OS.
    *************************************************************************/
-   if (window.location.pathname.indexOf("cadastraOS") > -1){
+   else if (window.location.pathname.indexOf("cadastraOS") > -1){
 
       //Verifica se está em processo de finalização de OS
       let processoFinalizaAuto = sessionStorage.getItem("processoFinalizaAuto");
