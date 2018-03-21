@@ -99,8 +99,9 @@
             }
             /* Caso não exista mais requisições a serem finalizadas */
             else{
-               sessionStorage.clear();
+               sessionStorage.setItem("acessos",0);
                sessionStorage.setItem("processoFinalizaAuto",2);
+               window.location.href = enderecoPaginaPrincipal;
             }
          }
       }
@@ -122,7 +123,7 @@
                   jQuery(location).attr("href", url);
                }
          });
-      }   
+      }
       /*************************************************************************
             CÓDIGO PARA FAZER AS ALTERAÇÕES NECESSÁRIAS NA ORDEM DE SERVIÇO
             OBS: Essa parte do código acaba rodando tanto na hora do
@@ -139,19 +140,12 @@
          setTimeout(function(){ jQuery( "tfoot > tr > td > input:nth-child(1)" ).click(); }, 2500);
       }
    }
-      Esse ação acaba funcionando por coincidencia para clicar no botão "Alterar" e no "Alterar Outra Ordem de Serviço"
-      */
-      setTimeout(function(){ jQuery( "tfoot > tr > td > input:nth-child(1)" ).click(); }, 2500);
-   }
-
-
-
 
    /*********************************************************************************************
                              SEGUNDA PARTE DA FINALIZAÇÃO AUTOMATICA
-                           MUDAR DE EM ROTA VISITA PARA SERVIÇO EXECUTADO
+                           REDIRECIONAMENTO PARA A PAGINA DE OS EM ROTA VISITA
    *********************************************************************************************/
-   if(processoFinalizaAuto == 3){
+   if(processoFinalizaAuto == 2){
       /***********************************************************************************************
       Função de redirecionamento para págida das ordens de serviço classificadas como "Em Rota Visita"
       Funciona apenas na página principal (https://sipac.ufba.br/sipac/supinfra/index.jsf)
@@ -173,9 +167,33 @@
          return (a()==false) ? false : b();
       }
 
+      if (window.location.pathname.indexOf("index.jsf") > -1){
+         sessionStorage.setItem("processoFinalizaAuto",3);
+         abrirPaginaEmRotaVisita();
+      }
+   }
+   /*********************************************************************************************
+                             TERCEIRA PARTE DA FINALIZAÇÃO AUTOMATICA
+                           MUDAR DE EM ROTA VISITA PARA SERVIÇO EXECUTADO
+   *********************************************************************************************/
+   if(processoFinalizaAuto == 3){
 
+      /*
+         Preenchimento do formulário de busca de OS
+      */
+      if (window.location.pathname.indexOf("index.jsf") > -1){
+         jQuery("input[id='consultaRequisicoes:ckNumeroAno']").click(); //clique opção de busca
+         jQuery("input[id='consultaRequisicoes:numRequisicao']").val("12"); //número da requisição
+         jQuery("input[id='consultaRequisicoes:anoRequisicao']").val("12"); //ano da requisição
+         jQuery("input[name='consultaRequisicoes:j_id_jsp_1184468779_41']").click(); //confirmar busca
+      }
 
-
-
+      /*
+         Página pós busca de OS
+      */
+      if (window.location.pathname.indexOf("listagem_requisicoes") > -1){
+         jQuery("input[id='consultaRequisicoes:requisicoes:0:chkReq']").click();
+      }
+   }
   console.log("adieu");
 })();
