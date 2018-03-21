@@ -18,9 +18,9 @@
    const enderecoBuscaOsPreBusca = "https://sipac.ufba.br/sipac/buscaOS.do?acao=3&tipo=11&aba=manutencao-menusupinfra";
    // Endereço da página principal
    const enderecoPaginaPrincipal = "https://sipac.ufba.br/sipac/supinfra/index.jsf";
-   /******************************************
-      CÓDIGO PARA A PÁGINA PRINCIPAL DO SIPAC
-   *********************************************/
+   /*****************************************************************************
+      CÓDIGO PARA A PÁGINA PRINCIPAL DO SIPAC - FORMULARIO E INTERFACE DE USUÁRIO
+   ******************************************************************************/
    if(window.location.pathname.indexOf("index.jsf") > -1){
 
       //Adicionando Formulário para entrada das requisições que se deseja finalizar
@@ -50,6 +50,10 @@
       });
    }
 
+   /*********************************************************************************************
+                             PRIMEIRA PARTE DA FINALIZAÇÃO AUTOMATICA
+                           MUDAR STATUS DA ORDEM DE SERVIÇO PARA CONCLUIDA
+   *********************************************************************************************/
    /*************************************************************************
          CÓDIGO PARA A PÁGINA CONSULTA OS CASO TENHA CLICADO PARA FINALIZAR
    *************************************************************************/
