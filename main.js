@@ -113,6 +113,9 @@
             html += "<p>";
                html += sessionStorage.getItem("requisitRemanescentes");
             html += "</p>";
+            html += "<a href='" + enderecoPaginaPrincipal + "'>";
+               html += " Voltar ";
+            html += "</a>";
          html += "</body>";
          return html;
       }
