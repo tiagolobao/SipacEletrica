@@ -148,6 +148,8 @@
             sessionStorage.setItem("requisit",input);
             sessionStorage.setItem("acessos",0);
             sessionStorage.setItem("processoFinalizaAuto",1);
+            sessionStorage.setItem("emRotaVisita","");
+            sessionStorage.setItem("requisitRemanescentes","");
             window.location.href = enderecoBuscaOsPreBusca;
          });
       }
@@ -186,8 +188,28 @@
                CÓDIGO PARA CLICAR EM ALTERAR OS CASO ESTEJA NO PROCESSO DE FINALIZAÇÃO AUTOMATICA
          *************************************************************************/
          if (window.location.pathname.indexOf("buscaOS") > -1){
-               //Espera a página terminar de carregar
-               jQuery(document).ready( function() {
+            //Espera a página terminar de carregar
+            jQuery(document).ready( function() {
+               /*Obtem informação de qual é o status da OS*/
+               //Obtendo endereço para pegar status da OS
+               let onclickOS = jQuery("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a ").attr('onclick');
+               let numOS =  jQuery("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a").html();
+               let enderecoStatusOS = "https://sipac.ufba.br" + onclickOS.substr(13, onclickOS.indexOf("&popup=popup") - 1);
+               //Pegando informações da página
+               jQuery.ajax(enderecoStatusOS).done(function(page) {
+                  var response = jQuery(page).find('div[id="container-popup"] > table > tbody > tr > td > table > tbody > tr:nth-child(5) > td').text();
+                  response = response.replace(/(\r\n\t|\n|\r\t)/gm,"");
+                  //Separando OS EM ROTA VISITA das outras
+                  if(response == '		   			EM ROTA VISITA				'){
+                     let buffer = sessionStorage.getItem("emRotaVisita");
+                     buffer += "," + numOS.replace(/ /g,'');
+                     sessionStorage.setItem("emRotaVisita",buffer);
+                  }
+                  else{
+                     let buffer = sessionStorage.getItem("requisitRemanescentes");
+                     buffer += "," + numOS.replace(/ /g,'');
+                     sessionStorage.setItem("requisitRemanescentes",buffer);
+                  }
                   /* Confere se é o momento certo de clicar para alterar a OS
                      1 - Deve estar ativo o processo de finalização automatica
                      2 - Deve acontecer apenas depois que buscar a OS correta a se finalizar
@@ -198,6 +220,7 @@
                      let url = jQuery("#conteudo > table > tbody > tr >  td:nth-child(9) > a ").prop("href");
                      jQuery(location).attr("href", url);
                   }
+               });
             });
          }
          /*************************************************************************
@@ -237,6 +260,13 @@
             Preenchimento do formulário de busca de OS
          */
          if (window.location.pathname.indexOf("index.jsf") > -1){
+
+            //Alterando a lista de requisições que se deve finalizar
+            let newList = sessionStorage.getItem("emRotaVisita");
+            sessionStorage.setItem(
+               "requisit",
+               newList.substring(1,newList.length)
+            );
 
             let OS = getProximaBusca();
             if(OS.keepGoing){
