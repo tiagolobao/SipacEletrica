@@ -257,18 +257,25 @@
             confirmChangeServicoExecutado(); //Necessário para aparecer a opção de quantidade de horas
             setTimeout(
                function(){
+                  //Quantidade de horas
                   jQuery("input[name='confirmaOperacao:requisicoes:0:j_id_jsp_1655664044_41']").val("8");
+                  setTimeout(
+                     function(){
+                        //Evita o aparecimento do alerta
+                        jQuery("input[name='confirmaOperacao:j_id_jsp_1655664044_42']").attr("onclick","return true;");
+                        setTimeout(
+                           function(){
+                              //Confirma a operação
+                              jQuery("input[name='confirmaOperacao:j_id_jsp_1655664044_42']").click();
+                           },
+                           3000 //Tempo de confirmar a operação
+                        );
+                     },
+                     3000 //Tempo de evitar o aparecimento do alerta
+                  );
                },
-               5000
-            ); //Quantidade de horas
-            setTimeout(
-               function(){jQuery("input[name='confirmaOperacao:j_id_jsp_1655664044_42']").attr("onclick","return true;");},
-               5000
-            ); //Evita o aparecimento do alerta
-            setTimeout(
-               function(){jQuery("input[name='confirmaOperacao:j_id_jsp_1655664044_42']").click();},
-               5000
-            ); //Confirma a operação
+               3000 //Tempo de colocar a quantidade de horas
+            );
          }
 
          /*
