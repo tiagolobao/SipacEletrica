@@ -22,7 +22,9 @@
    /**********************************************
       PROCEDIMENTOS E FUNÇÕES
    ***********************************************/
-   //Retorna objeto com dados da próxima requisição a ser buscada
+   /******************************
+   Retorna objeto com dados da próxima requisição a ser buscada
+   ******************************/
    function getProximaBusca(){
       /* Realizando uma nova busca de OS */
       let requisit = [];
@@ -61,6 +63,27 @@
             "keepGoing": false
          };
       }
+   }
+
+   /***********************************************************************************************
+   Função de redirecionamento para págida das ordens de serviço classificadas como "Em Rota Visita"
+   Funciona apenas na página principal (https://sipac.ufba.br/sipac/supinfra/index.jsf)
+   ************************************************************************************************/
+   function abrirPaginaEmRotaVisita(){
+      var a=function(){
+         setAba('manutencao-menusupinfra');
+      };
+      var b=function(){
+         if(typeof jsfcljs == 'function'){
+            jsfcljs(
+               document.getElementById('infraForm'),
+               {'infraForm:rotaVisita':'infraForm:rotaVisita','operacao':'2'},
+               ''
+            );
+         }
+         return false;
+      };
+      return (a()==false) ? false : b();
    }
 
    /*****************************************************************************
@@ -165,27 +188,6 @@
                            REDIRECIONAMENTO PARA A PAGINA DE OS EM ROTA VISITA
    *********************************************************************************************/
    if(processoFinalizaAuto == 2){
-      /***********************************************************************************************
-      Função de redirecionamento para págida das ordens de serviço classificadas como "Em Rota Visita"
-      Funciona apenas na página principal (https://sipac.ufba.br/sipac/supinfra/index.jsf)
-      ************************************************************************************************/
-      function abrirPaginaEmRotaVisita(){
-         var a=function(){
-            setAba('manutencao-menusupinfra');
-         };
-         var b=function(){
-            if(typeof jsfcljs == 'function'){
-               jsfcljs(
-                  document.getElementById('infraForm'),
-                  {'infraForm:rotaVisita':'infraForm:rotaVisita','operacao':'2'},
-                  ''
-               );
-            }
-            return false;
-         };
-         return (a()==false) ? false : b();
-      }
-
       if (window.location.pathname.indexOf("index.jsf") > -1){
          sessionStorage.setItem("processoFinalizaAuto",3);
          abrirPaginaEmRotaVisita();
