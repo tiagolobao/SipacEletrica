@@ -18,6 +18,51 @@
    const enderecoBuscaOsPreBusca = "https://sipac.ufba.br/sipac/buscaOS.do?acao=3&tipo=11&aba=manutencao-menusupinfra";
    // Endereço da página principal
    const enderecoPaginaPrincipal = "https://sipac.ufba.br/sipac/supinfra/index.jsf";
+
+   /**********************************************
+      PROCEDIMENTOS E FUNÇÕES
+   ***********************************************/
+   //Retorna objeto com dados da próxima requisição a ser buscada
+   function getProximaBusca(){
+      /* Realizando uma nova busca de OS */
+      let requisit = [];
+      let acess = parseInt( sessionStorage.getItem("acessos") );
+      let input = sessionStorage.getItem("requisit");
+      let j=0;
+      let i;
+      let anterior=0;
+      input = ' ' + input; //Evitando que a primeira execução da substring exclua o primeiro caractere
+      input = input + ','; //Evitando que o algoritimo não pegue a ultima requisitão
+      for(i=0;i<=input.length;i++){
+         if(input[i] == ","){
+            requisit[j] = input.substring(anterior+1, i); //Separando em uma array cada requisição
+            j = j + 1; //Contando o número de requisições
+            anterior = i;
+         }
+      }
+      /* Caso ainda existam requisições a serem finalizadas */
+      if(acess<requisit.length){
+         var barra;
+         sessionStorage.setItem("acessos",acess+1);
+         for(i=0;i<=requisit[acess].length;i++){
+            if(requisit[acess][i]=='/'){
+                  barra=i; //localizando a posição da barra que separa o numero da requisição do ano
+            }
+         }
+         return {
+            "keepGoing": true,
+            "numero": requisit[acess].substring(0,barra),
+            "ano": requisit[acess].substring(barra+1,requisit[acess].length+1)
+         };
+      }
+      /* Caso não exista mais requisições a serem finalizadas */
+      else{
+         return {
+            "keepGoing": false
+         };
+      }
+   }
+
    /*****************************************************************************
       CÓDIGO PARA A PÁGINA PRINCIPAL DO SIPAC - FORMULARIO E INTERFACE DE USUÁRIO
    ******************************************************************************/
@@ -61,35 +106,12 @@
             CÓDIGO PARA A PÁGINA CONSULTA OS CASO TENHA CLICADO PARA FINALIZAR
       *************************************************************************/
       if (window.location.href == enderecoBuscaOsPreBusca  ||  window.location.pathname.indexOf("populaOS") > -1){
-         /* Realizando uma nova busca de OS */
-         var requisit = [];
-         var acess = parseInt( sessionStorage.getItem("acessos") );
-         var input = sessionStorage.getItem("requisit");
 
-         var j=0;
-         var i;
-         var anterior=0;
-         input = ' ' + input; //Evitando que a primeira execução da substring exclua o primeiro caractere
-         input = input + ','; //Evitando que o algoritimo não pegue a ultima requisitão
-         for(i=0;i<=input.length;i++){
-            if(input[i] == ","){
-               requisit[j] = input.substring(anterior+1, i); //Separando em uma array cada requisição
-               j = j + 1; //Contando o número de requisições
-               anterior = i;
-            }
-         }
-         /* Caso ainda existam requisições a serem finalizadas */
-         if(acess<requisit.length){
-            var barra;
-            sessionStorage.setItem("acessos",acess+1);
-            for(i=0;i<=requisit[acess].length;i++){
-               if(requisit[acess][i]=='/'){
-                     barra=i; //localizando a posição da barra que separa o numero da requisição do ano
-               }
-            }
+         let OS = getProximaBusca();
+         if(OS.keepGoing){
             jQuery("#consultaPorRequisicaoCheck").click();
-            jQuery("input[name='ordemServico.requisicao.numero']").val(requisit[acess].substring(0,barra)); //numero da req
-            jQuery("input[name='ordemServico.requisicao.ano']").val(requisit[acess].substring(barra+1,requisit[acess].length+1)); //ano da req
+            jQuery("input[name='ordemServico.requisicao.numero']").val(OS.numero); //numero da req
+            jQuery("input[name='ordemServico.requisicao.ano']").val(OS.ano); //ano da req
             setTimeout(
                function(){ jQuery( "#conteudo > form > table > tfoot >tr > td > input:nth-child(2)" ).click(); },
                100
@@ -179,13 +201,20 @@
          Preenchimento do formulário de busca de OS
       */
       if (window.location.pathname.indexOf("index.jsf") > -1){
-         jQuery("input[id='consultaRequisicoes:ckNumeroAno']").click(); //clique opção de busca
-         jQuery("input[id='consultaRequisicoes:numRequisicao']").val("12"); //número da requisição
-         jQuery("input[id='consultaRequisicoes:anoRequisicao']").val("12"); //ano da requisição
-         setTimeout(
-            function(){jQuery("input[name='consultaRequisicoes:j_id_jsp_1184468779_41']").click();},
-            100
-         ); //confirmar busca
+
+         let OS = getProximaBusca();
+         if(OS.keepGoing){
+            jQuery("input[id='consultaRequisicoes:ckNumeroAno']").click(); //clique opção de busca
+            jQuery("input[id='consultaRequisicoes:numRequisicao']").val(OS.numero); //número da requisição
+            jQuery("input[id='consultaRequisicoes:anoRequisicao']").val(OS.ano); //ano da requisição
+            setTimeout(
+               function(){jQuery("input[name='consultaRequisicoes:j_id_jsp_1184468779_41']").click();},
+               100
+            ); //confirmar busca
+         }
+         else{
+
+         }
       }
 
       /*
