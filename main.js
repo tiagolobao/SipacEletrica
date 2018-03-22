@@ -101,6 +101,22 @@
          );
       }
 
+      /***************************************************************************
+      Gera página web para mostrar Requisições que não foram totalmente finalizadas
+      porque não estavam como em rota visita
+      ****************************************************************************/
+      function paginaOsRemanescentes(){
+         let html = "<head>";
+         html += "";
+         html += "</head>";
+         html += "<body>";
+            html += "<p>";
+               html += sessionStorage.getItem("requisitRemanescentes");
+            html += "</p>";
+         html += "</body>";
+         return html;
+      }
+
       /*****************************************************************************
          CÓDIGO PARA A PÁGINA PRINCIPAL DO SIPAC - FORMULARIO E INTERFACE DE USUÁRIO
       ******************************************************************************/
@@ -230,7 +246,7 @@
                ); //confirmar busca
             }
             else{
-
+               //Quando acaba todas as OS - Improvável pois essa parte do código só roda uma vez
             }
          }
 
@@ -291,7 +307,30 @@
          */
          if (window.location.pathname.indexOf("sucesso_operacao") > -1){
 
-
+            let OS = getProximaBusca();
+            if(OS.keepGoing){
+               jQuery("input[id='consultaRequisicoes:ckNumeroAno']").prop("checked",true); //Selecionando tipo de pesquisa
+               jQuery("input[id='consultaRequisicoes:numRequisicao']").val(OS.numero); //número da requisição
+               jQuery("input[id='consultaRequisicoes:anoRequisicao']").val(OS.ano); //ano da requisição
+               /************************************
+                  MOMENTO QUE PODE GERAR CONFUSÃO
+                  É NECESSÁRIO VOLTAR PARA O PASSO 3 NESSE MOMENTO POIS VOLTA PRA PÁGINA "listagem_requisicoes"
+                  É REALIZADA A SELEÇÃO DA OS E DEPOIS VOLTA PARA A MESMA PÁGINA "listagem_requisicoes" COM O PASSO 4
+               ***************************************/
+               sessionStorage.setItem("processoFinalizaAuto",3);
+               setTimeout(
+                  function(){jQuery("input[name='consultaRequisicoes:j_id_jsp_1184468779_41']").click();},
+                  100
+               ); //confirmar busca
+            }
+            else{
+               //Quando acaba todas as OS
+               alert("As ordens de serviço foram finalizadas");
+               document.open();
+               let page = paginaOsRemanescentes();
+               sessionStorage.clear();
+               document.write( page );
+            }
          }
       }
 
