@@ -61,48 +61,42 @@
             CÓDIGO PARA A PÁGINA CONSULTA OS CASO TENHA CLICADO PARA FINALIZAR
       *************************************************************************/
       if (window.location.href == enderecoBuscaOsPreBusca  ||  window.location.pathname.indexOf("populaOS") > -1){
+         /* Realizando uma nova busca de OS */
+         var requisit = [];
+         var acess = parseInt( sessionStorage.getItem("acessos") );
+         var input = sessionStorage.getItem("requisit");
 
-         //Verifica se o processo de finalização automatica está ativo
-         let processoFinalizaAuto = sessionStorage.getItem("processoFinalizaAuto");
-         if(processoFinalizaAuto){
-            /* Realizando uma nova busca de OS */
-            var requisit = [];
-            var acess = parseInt( sessionStorage.getItem("acessos") );
-            var input = sessionStorage.getItem("requisit");
-
-            var j=0;
-            var i;
-            var anterior=0;
-            input = ' ' + input; //Evitando que a primeira execução da substring exclua o primeiro caractere
-            input = input + ','; //Evitando que o algoritimo não pegue a ultima requisitão
-            for(i=0;i<=input.length;i++){
-               if(input[i] == ","){
-                  requisit[j] = input.substring(anterior+1, i); //Separando em uma array cada requisição
-                  j = j + 1; //Contando o número de requisições
-                  anterior = i;
+         var j=0;
+         var i;
+         var anterior=0;
+         input = ' ' + input; //Evitando que a primeira execução da substring exclua o primeiro caractere
+         input = input + ','; //Evitando que o algoritimo não pegue a ultima requisitão
+         for(i=0;i<=input.length;i++){
+            if(input[i] == ","){
+               requisit[j] = input.substring(anterior+1, i); //Separando em uma array cada requisição
+               j = j + 1; //Contando o número de requisições
+               anterior = i;
+            }
+         }
+         /* Caso ainda existam requisições a serem finalizadas */
+         if(acess<requisit.length){
+            var barra;
+            sessionStorage.setItem("acessos",acess+1);
+            for(i=0;i<=requisit[acess].length;i++){
+               if(requisit[acess][i]=='/'){
+                     barra=i; //localizando a posição da barra que separa o numero da requisição do ano
                }
             }
-
-            /* Caso ainda existam requisições a serem finalizadas */
-            if(acess<requisit.length){
-               var barra;
-               sessionStorage.setItem("acessos",acess+1);
-               for(i=0;i<=requisit[acess].length;i++){
-                  if(requisit[acess][i]=='/'){
-                        barra=i; //localizando a posição da barra que separa o numero da requisição do ano
-                  }
-               }
-               jQuery("#consultaPorRequisicaoCheck").click();
-               jQuery("input[name='ordemServico.requisicao.numero']").val(requisit[acess].substring(0,barra)); //numero da req
-               jQuery("input[name='ordemServico.requisicao.ano']").val(requisit[acess].substring(barra+1,requisit[acess].length+1)); //ano da req
-               setTimeout(function(){ jQuery( "#conteudo > form > table > tfoot >tr > td > input:nth-child(2)" ).click(); }, 100);
-            }
-            /* Caso não exista mais requisições a serem finalizadas */
-            else{
-               sessionStorage.setItem("acessos",0);
-               sessionStorage.setItem("processoFinalizaAuto",2);
-               window.location.href = enderecoPaginaPrincipal;
-            }
+            jQuery("#consultaPorRequisicaoCheck").click();
+            jQuery("input[name='ordemServico.requisicao.numero']").val(requisit[acess].substring(0,barra)); //numero da req
+            jQuery("input[name='ordemServico.requisicao.ano']").val(requisit[acess].substring(barra+1,requisit[acess].length+1)); //ano da req
+            setTimeout(function(){ jQuery( "#conteudo > form > table > tfoot >tr > td > input:nth-child(2)" ).click(); }, 100);
+         }
+         /* Caso não exista mais requisições a serem finalizadas */
+         else{
+            sessionStorage.setItem("acessos",0);
+            sessionStorage.setItem("processoFinalizaAuto",2);
+            window.location.href = enderecoPaginaPrincipal;
          }
       }
 
