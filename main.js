@@ -90,7 +90,10 @@
             jQuery("#consultaPorRequisicaoCheck").click();
             jQuery("input[name='ordemServico.requisicao.numero']").val(requisit[acess].substring(0,barra)); //numero da req
             jQuery("input[name='ordemServico.requisicao.ano']").val(requisit[acess].substring(barra+1,requisit[acess].length+1)); //ano da req
-            setTimeout(function(){ jQuery( "#conteudo > form > table > tfoot >tr > td > input:nth-child(2)" ).click(); }, 100);
+            setTimeout(
+               function(){ jQuery( "#conteudo > form > table > tfoot >tr > td > input:nth-child(2)" ).click(); },
+               100
+            );
          }
          /* Caso não exista mais requisições a serem finalizadas */
          else{
@@ -179,7 +182,10 @@
          jQuery("input[id='consultaRequisicoes:ckNumeroAno']").click(); //clique opção de busca
          jQuery("input[id='consultaRequisicoes:numRequisicao']").val("12"); //número da requisição
          jQuery("input[id='consultaRequisicoes:anoRequisicao']").val("12"); //ano da requisição
-         jQuery("input[name='consultaRequisicoes:j_id_jsp_1184468779_41']").click(); //confirmar busca
+         setTimeout(
+            function(){jQuery("input[name='consultaRequisicoes:j_id_jsp_1184468779_41']").click();},
+            100
+         ); //confirmar busca
       }
 
       /*
