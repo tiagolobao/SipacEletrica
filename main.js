@@ -217,7 +217,7 @@
                   let enderecoPaginaAtual = window.location.href; //1
                   let processoFinalizaAuto = sessionStorage.getItem("processoFinalizaAuto"); //2
                   if(enderecoPaginaAtual != enderecoBuscaOsPreBusca && processoFinalizaAuto){
-                     let url = jQuery("#conteudo > table > tbody > tr >  td:nth-child(9) > a ").prop("href");
+                     let url = jQuery("#conteudo > table > tbody > tr >  td:nth-child(10) > a ").prop("href");
                      jQuery(location).attr("href", url);
                   }
                });
