@@ -148,7 +148,7 @@
             2 - Redireciona a página para alterar as requisições
          */
          document.getElementById("fibut").addEventListener('click', function(){
-            var input = jQuery("#finauto").val();
+            var input = document.getElementById("finauto").value;
             input = input.replace(/ /g,''); //Removendo todos os espaços
             sessionStorage.setItem("requisit",input);
             sessionStorage.setItem("acessos",0);
@@ -174,8 +174,8 @@
             let OS = getProximaBusca();
             if(OS.keepGoing){
                jQuery("#consultaPorRequisicaoCheck").click();
-               jQuery("input[name='ordemServico.requisicao.numero']").val(OS.numero); //numero da req
-               jQuery("input[name='ordemServico.requisicao.ano']").val(OS.ano); //ano da req
+               document.querySelector("input[name='ordemServico.requisicao.numero']").value = OS.numero;
+               document.querySelector("input[name='ordemServico.requisicao.ano']").value = OS.ano;
                setTimeout(
                   function(){ jQuery( "#conteudo > form > table > tfoot >tr > td > input:nth-child(2)" ).click(); },
                   100
@@ -236,8 +236,11 @@
          *************************************************************************/
          if (window.location.pathname.indexOf("cadastraOS") > -1){
 
-            jQuery('[id="ordemServicoForm:statusOrdemServico"]').val('1'); //Muda o status para concluída
-            jQuery("textarea[name='ordemServicoForm:j_id_jsp_2030603547_110']").val("Serviço executado."); //Muda o Diagnostico de Vistoria
+            //Conferindo se existe o elemento antes de muda-lo
+            if(document.getElementById("ordemServicoForm:statusOrdemServico") != null){
+               document.getElementById("ordemServicoForm:statusOrdemServico").value = '1'; //Muda o status para concluída
+               document.querySelector("textarea[name='ordemServicoForm:j_id_jsp_2030603547_110']").value = "Serviço executado."; //Muda o Diagnostico de Vistoria
+            }
             /*
             Esse ação acaba funcionando por coincidencia para clicar no botão "Alterar" e no "Alterar Outra Ordem de Serviço"
             */
@@ -276,8 +279,8 @@
             let OS = getProximaBusca();
             if(OS.keepGoing){
                jQuery("input[id='consultaRequisicoes:ckNumeroAno']").click(); //clique opção de busca
-               jQuery("input[id='consultaRequisicoes:numRequisicao']").val(OS.numero); //número da requisição
-               jQuery("input[id='consultaRequisicoes:anoRequisicao']").val(OS.ano); //ano da requisição
+               document.getElementById('consultaRequisicoes:numRequisicao').value = OS.numero;
+               document.getElementById('consultaRequisicoes:anoRequisicao').value = OS.ano;
                setTimeout(
                   function(){jQuery("input[name='consultaRequisicoes:j_id_jsp_1184468779_41']").click();},
                   100
@@ -308,12 +311,12 @@
             Página pós seleção de OS para mudar status
          */
          if (window.location.pathname.indexOf("listagem_requisicoes") > -1){
-            jQuery("select[name='confirmaOperacao:j_id_jsp_1655664044_4']").val("1"); //Seleciona Serviço executado
+            document.querySelector("select[name='confirmaOperacao:j_id_jsp_1655664044_4']").value = "1"; //Seleciona Serviço executado
             confirmChangeServicoExecutado(); //Necessário para aparecer a opção de quantidade de horas
             setTimeout(
                function(){
                   //Quantidade de horas
-                  jQuery("input[name='confirmaOperacao:requisicoes:0:j_id_jsp_1655664044_41']").val("8");
+                  document.querySelector("input[name='confirmaOperacao:requisicoes:0:j_id_jsp_1655664044_41']").value = "8";
                   setTimeout(
                      function(){
                         //Evita o aparecimento do alerta
@@ -349,8 +352,8 @@
             let OS = getProximaBusca();
             if(OS.keepGoing){
                jQuery("input[id='consultaRequisicoes:ckNumeroAno']").prop("checked",true); //Selecionando tipo de pesquisa
-               jQuery("input[id='consultaRequisicoes:numRequisicao']").val(OS.numero); //número da requisição
-               jQuery("input[id='consultaRequisicoes:anoRequisicao']").val(OS.ano); //ano da requisição
+               document.getElementById('consultaRequisicoes:numRequisicao').value = OS.numero;
+               document.getElementById('consultaRequisicoes:anoRequisicao').value = OS.ano;
                /************************************
                   MOMENTO QUE PODE GERAR CONFUSÃO
                   É NECESSÁRIO VOLTAR PARA O PASSO 3 NESSE MOMENTO POIS VOLTA PRA PÁGINA "listagem_requisicoes"
