@@ -125,39 +125,6 @@
          document.write( html );
       }
 
-      /*****************************************************************************
-         CÓDIGO PARA A PÁGINA PRINCIPAL DO SIPAC - FORMULARIO E INTERFACE DE USUÁRIO
-      ******************************************************************************/
-      if(window.location.pathname.indexOf("index.jsf") > -1){
-
-         //Adicionando Formulário para entrada das requisições que se deseja finalizar
-         var htmlAppend =  '<center>';
-             htmlAppend += '<br>';
-             htmlAppend += '<style>textarea {resize: vertical;}</style>';
-             htmlAppend += '<h1> Finalização automática </h1>';
-             htmlAppend += '<h3> Separe as ordens de serviço por vírgulas. Espaços serão ignorados. Confira antes de clicar para finalizar </h3>';
-             htmlAppend += '<textarea id="finauto" rows="4" cols="60" placeholder="OS"> </textarea>';
-             htmlAppend += '<br>';
-             htmlAppend += '<button type="button" id="fibut">Finalizar!</button>';
-             htmlAppend += '</center>';
-         jQuery('#manutencao-menusupinfra').append(htmlAppend);
-
-         //Ação de clicar para finalizar
-         /*
-            1 - É adicionado as variáveis de sessão para as finalizações
-            2 - Redireciona a página para alterar as requisições
-         */
-         document.getElementById("fibut").addEventListener('click', function(){
-            var input = document.getElementById("finauto").value;
-            input = input.replace(/ /g,''); //Removendo todos os espaços
-            sessionStorage.setItem("requisit",input);
-            sessionStorage.setItem("acessos",0);
-            sessionStorage.setItem("processoFinalizaAuto",1);
-            sessionStorage.setItem("emRotaVisita","");
-            sessionStorage.setItem("requisitRemanescentes","");
-            window.location.href = enderecoBuscaOsPreBusca;
-         });
-      }
 
       // Estado em que a finalização automática se encontra
       var processoFinalizaAuto = parseInt( sessionStorage.getItem("processoFinalizaAuto") );
@@ -166,6 +133,40 @@
                               MUDAR STATUS DA ORDEM DE SERVIÇO PARA CONCLUIDA
       *********************************************************************************************/
       if(processoFinalizaAuto == 1){
+         /*****************************************************************************
+            CÓDIGO PARA A PÁGINA PRINCIPAL DO SIPAC - FORMULARIO E INTERFACE DE USUÁRIO
+         ******************************************************************************/
+         if(window.location.pathname.indexOf("index.jsf") > -1){
+
+            //Adicionando Formulário para entrada das requisições que se deseja finalizar
+            var htmlAppend =  '<center>';
+                htmlAppend += '<br>';
+                htmlAppend += '<style>textarea {resize: vertical;}</style>';
+                htmlAppend += '<h1> Finalização automática </h1>';
+                htmlAppend += '<h3> Separe as ordens de serviço por vírgulas. Espaços serão ignorados. Confira antes de clicar para finalizar </h3>';
+                htmlAppend += '<textarea id="finauto" rows="4" cols="60" placeholder="OS"> </textarea>';
+                htmlAppend += '<br>';
+                htmlAppend += '<button type="button" id="fibut">Finalizar!</button>';
+                htmlAppend += '</center>';
+            jQuery('#manutencao-menusupinfra').append(htmlAppend);
+
+            //Ação de clicar para finalizar
+            /*
+               1 - É adicionado as variáveis de sessão para as finalizações
+               2 - Redireciona a página para alterar as requisições
+            */
+            document.getElementById("fibut").addEventListener('click', function(){
+               var input = document.getElementById("finauto").value;
+               input = input.replace(/ /g,''); //Removendo todos os espaços
+               sessionStorage.setItem("requisit",input);
+               sessionStorage.setItem("acessos",0);
+               sessionStorage.setItem("processoFinalizaAuto",1);
+               sessionStorage.setItem("emRotaVisita","");
+               sessionStorage.setItem("requisitRemanescentes","");
+               window.location.href = enderecoBuscaOsPreBusca;
+            });
+         }
+
          /*************************************************************************
                CÓDIGO PARA A PÁGINA CONSULTA OS CASO TENHA CLICADO PARA FINALIZAR
          *************************************************************************/
