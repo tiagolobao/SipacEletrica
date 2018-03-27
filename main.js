@@ -198,9 +198,9 @@
             jQuery(document).ready( function() {
                /*Obtem informação de qual é o status da OS*/
                //Obtendo endereço para pegar status da OS
-               let onclickOS = jQuery("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a ").attr('onclick');
-               let numOS =  jQuery("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a").html();
-               let enderecoStatusOS = "https://sipac.ufba.br" + onclickOS.substr(13, onclickOS.indexOf("&popup=popup") - 1);
+               let onclickOS = document.querySelector("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a ").getAttribute("onclick");
+               let numOS = document.querySelector("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a").innerHTML;
+               let enderecoStatusOS = "https://sipac.ufba.br" + onClickOS.substr(13, onClickOS.indexOf("&popup=popup") - 1);
                //Pegando informações da página
                jQuery.ajax(enderecoStatusOS).done(function(page) {
                   var response = jQuery(page).find('div[id="container-popup"] > table > tbody > tr > td > table > tbody > tr:nth-child(5) > td').text();
@@ -223,8 +223,8 @@
                   let enderecoPaginaAtual = window.location.href; //1
                   let processoFinalizaAuto = sessionStorage.getItem("processoFinalizaAuto"); //2
                   if(enderecoPaginaAtual != enderecoBuscaOsPreBusca && processoFinalizaAuto){
-                     let url = jQuery("#conteudo > table > tbody > tr >  td:nth-child(10) > a ").prop("href");
-                     jQuery(location).attr("href", url);
+                     let url = document.querySelector("#conteudo > table > tbody > tr >  td:nth-child(10) > a ").href;
+                     location.href = url;
                   }
                });
             });
@@ -279,7 +279,7 @@
 
             let OS = getProximaBusca();
             if(OS.keepGoing){
-               jQuery("input[id='consultaRequisicoes:ckNumeroAno']").click(); //clique opção de busca
+               document.getElementById('consultaRequisicoes:ckNumeroAno').checked = true; //Selecionando tipo de pesquisa
                document.getElementById('consultaRequisicoes:numRequisicao').value = OS.numero;
                document.getElementById('consultaRequisicoes:anoRequisicao').value = OS.ano;
                setTimeout(
@@ -321,7 +321,7 @@
                   setTimeout(
                      function(){
                         //Evita o aparecimento do alerta
-                        jQuery("input[name='confirmaOperacao:j_id_jsp_1655664044_42']").attr("onclick","return true;");
+                        document.querySelector("input[name='confirmaOperacao:j_id_jsp_1655664044_42']").setAttribute("onclick", "return true;");
                         setTimeout(
                            function(){
                               //Confirma a operação
@@ -352,7 +352,7 @@
 
             let OS = getProximaBusca();
             if(OS.keepGoing){
-               jQuery("input[id='consultaRequisicoes:ckNumeroAno']").prop("checked",true); //Selecionando tipo de pesquisa
+               document.getElementById('consultaRequisicoes:ckNumeroAno').checked = true; //Selecionando tipo de pesquisa
                document.getElementById('consultaRequisicoes:numRequisicao').value = OS.numero;
                document.getElementById('consultaRequisicoes:anoRequisicao').value = OS.ano;
                /************************************
