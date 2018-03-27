@@ -148,7 +148,7 @@
                 htmlAppend += '<br>';
                 htmlAppend += '<button type="button" id="fibut">Finalizar!</button>';
                 htmlAppend += '</center>';
-            jQuery('#manutencao-menusupinfra').append(htmlAppend);
+            document.getElementById('manutencao-menusupinfra').innerHTML += htmlAppend;
 
             //Ação de clicar para finalizar
             /*
