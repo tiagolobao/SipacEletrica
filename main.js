@@ -27,34 +27,18 @@
       ******************************/
       function getProximaBusca(){
          /* Realizando uma nova busca de OS */
-         let requisit = [];
-         let acess = parseInt( sessionStorage.getItem("acessos") );
-         let input = sessionStorage.getItem("requisit");
-         let j=0;
-         let i;
-         let anterior=0;
-         input = ' ' + input; //Evitando que a primeira execução da substring exclua o primeiro caractere
-         input = input + ','; //Evitando que o algoritimo não pegue a ultima requisitão
-         for(i=0;i<=input.length;i++){
-            if(input[i] == ","){
-               requisit[j] = input.substring(anterior+1, i); //Separando em uma array cada requisição
-               j = j + 1; //Contando o número de requisições
-               anterior = i;
-            }
-         }
+         let numeroDeAcessos = parseInt( sessionStorage.getItem("acessos") );
+         let listaDeRequisicoes = sessionStorage.getItem("requisit").split(",").map( function(elem, index, arr){
+            return elem.split("/");
+         });
+
          /* Caso ainda existam requisições a serem finalizadas */
-         if( acess<requisit.length && requisit[acess].substring(0,barra)!="" ){
-            var barra;
-            sessionStorage.setItem("acessos",acess+1);
-            for(i=0;i<=requisit[acess].length;i++){
-               if(requisit[acess][i]=='/'){
-                     barra=i; //localizando a posição da barra que separa o numero da requisição do ano
-               }
-            }
+         if( numeroDeAcessos<listaDeRequisicoes.length && listaDeRequisicoes[0][0]!='' ){
+            sessionStorage.setItem("acessos",numeroDeAcessos+1);
             return {
                "keepGoing": true,
-               "numero": requisit[acess].substring(0,barra),
-               "ano": requisit[acess].substring(barra+1,requisit[acess].length+1)
+               "numero": listaDeRequisicoes[numeroDeAcessos][0],
+               "ano": listaDeRequisicoes[numeroDeAcessos][1]
             };
          }
          /* Caso não exista mais requisições a serem finalizadas */
