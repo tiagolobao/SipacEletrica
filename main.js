@@ -301,6 +301,7 @@
             }
             else{
                //Quando acaba todas as OS - Improvável pois essa parte do código só roda uma vez
+               terminaFinalizacoes();
             }
          }
 
