@@ -147,7 +147,7 @@
             1 - É adicionado as variáveis de sessão para as finalizações
             2 - Redireciona a página para alterar as requisições
          */
-         jQuery("#fibut").on("click", function(){
+         document.getElementById("fibut").addEventListener('click', function(){
             var input = jQuery("#finauto").val();
             input = input.replace(/ /g,''); //Removendo todos os espaços
             sessionStorage.setItem("requisit",input);
