@@ -176,7 +176,7 @@
 
             let OS = getProximaBusca();
             if(OS.keepGoing){
-               jQuery("#consultaPorRequisicaoCheck").click();
+               document.getElementById('consultaPorRequisicaoCheck').checked = true; //Selecionando tipo de pesquisa
                document.querySelector("input[name='ordemServico.requisicao.numero']").value = OS.numero;
                document.querySelector("input[name='ordemServico.requisicao.ano']").value = OS.ano;
                setTimeout(
@@ -205,7 +205,7 @@
                let enderecoStatusOS = "https://sipac.ufba.br" + onClickOS.substr(13, onClickOS.indexOf("&popup=popup") - 1);
                //Pegando informações da página
                jQuery.ajax(enderecoStatusOS).done(function(page) {
-                  var response = jQuery(page).find('div[id="container-popup"] > table > tbody > tr > td > table > tbody > tr:nth-child(5) > td').text();
+                  var response = page.querySelector('div[id="container-popup"] > table > tbody > tr > td > table > tbody > tr:nth-child(5) > td').innerHTML;
                   response = response.replace(/(\r\n\t|\n|\r\t)/gm,"");
                   //Separando OS EM ROTA VISITA das outras
                   if(response == '		   			EM ROTA VISITA				'){
