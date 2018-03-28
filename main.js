@@ -197,7 +197,7 @@
             jQuery(document).ready( function() {
                /*Obtem informação de qual é o status da OS*/
                //Obtendo endereço para pegar status da OS
-               let onclickOS = document.querySelector("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a ").getAttribute("onclick");
+               let onClickOS = document.querySelector("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a ").getAttribute("onclick");
                let numOS = document.querySelector("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a").innerHTML;
                let enderecoStatusOS = "https://sipac.ufba.br" + onClickOS.substr(13, onClickOS.indexOf("&popup=popup") - 1);
                //Pegando informações da página
