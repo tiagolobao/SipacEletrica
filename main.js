@@ -180,7 +180,7 @@
                document.querySelector("input[name='ordemServico.requisicao.numero']").value = OS.numero;
                document.querySelector("input[name='ordemServico.requisicao.ano']").value = OS.ano;
                setTimeout(
-                  function(){ jQuery( "#conteudo > form > table > tfoot >tr > td > input:nth-child(2)" ).click(); },
+                  () => document.querySelector("#conteudo > form > table > tfoot >tr > td > input:nth-child(2)").click(),
                   100
                );
             }
