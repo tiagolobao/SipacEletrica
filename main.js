@@ -125,6 +125,17 @@
          document.write( html );
       }
 
+      /***************************************************************************
+      Função equivalente ao jQuery(document).ready(function(){});
+      ****************************************************************************/
+      function ready(fn) {
+         if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading"){
+            fn();
+         } else {
+            document.addEventListener('DOMContentLoaded', fn);
+         }
+      }
+
       /*****************************************************************************
          CÓDIGO PARA A PÁGINA PRINCIPAL DO SIPAC - FORMULARIO E INTERFACE DE USUÁRIO
       ******************************************************************************/
@@ -196,15 +207,17 @@
                CÓDIGO PARA CLICAR EM ALTERAR OS CASO ESTEJA NO PROCESSO DE FINALIZAÇÃO AUTOMATICA
          *************************************************************************/
          if (window.location.pathname.indexOf("buscaOS") > -1){
+            var parser = new DOMParser();
             //Espera a página terminar de carregar
-            jQuery(document).ready( function() {
+            ready( function() {
                /*Obtem informação de qual é o status da OS*/
                //Obtendo endereço para pegar status da OS
                let onClickOS = document.querySelector("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a ").getAttribute("onclick");
                let numOS = document.querySelector("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a").innerHTML;
                let enderecoStatusOS = "https://sipac.ufba.br" + onClickOS.substr(13, onClickOS.indexOf("&popup=popup") - 1);
                //Pegando informações da página
-               jQuery.ajax(enderecoStatusOS).done(function(page) {
+               jQuery.ajax(enderecoStatusOS).done(function(pageString) {
+                  let page = parser.parseFromString(pageString, "text/html");
                   var response = page.querySelector('div[id="container-popup"] > table > tbody > tr > td > table > tbody > tr:nth-child(5) > td').innerHTML;
                   response = response.replace(/(\r\n\t|\n|\r\t)/gm,"");
                   //Separando OS EM ROTA VISITA das outras
