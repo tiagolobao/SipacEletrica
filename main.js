@@ -257,10 +257,13 @@
                document.getElementById("ordemServicoForm:statusOrdemServico").value = '1'; //Muda o status para concluída
                document.querySelector("textarea[name='ordemServicoForm:j_id_jsp_2030603547_110']").value = "Serviço executado."; //Muda o Diagnostico de Vistoria
             }
-            /*
-            Esse ação acaba funcionando por coincidencia para clicar no botão "Alterar" e no "Alterar Outra Ordem de Serviço"
-            */
-            setTimeout(function(){ jQuery( "tfoot > tr > td > input:nth-child(1)" ).click(); }, 2500);
+
+            //Click para alterar OS
+            if(document.getElementsByName("ordemServicoForm:j_id_jsp_2030603547_131")[0] != null)
+               setTimeout(function(){ document.getElementsByName("ordemServicoForm:j_id_jsp_2030603547_131")[0].click(); }, 2500);
+            //Click para voltar busca de OS (Botão "Alterar Outra Ordem de Serviço")
+            else if(document.getElementsByName("j_id_jsp_1084759112_1:j_id_jsp_1084759112_35")[0] != null)
+               setTimeout(function(){ document.getElementsByName("j_id_jsp_1084759112_1:j_id_jsp_1084759112_35")[0].click(); }, 2500);
          }
       }
 
@@ -298,7 +301,7 @@
                document.getElementById('consultaRequisicoes:numRequisicao').value = OS.numero;
                document.getElementById('consultaRequisicoes:anoRequisicao').value = OS.ano;
                setTimeout(
-                  function(){jQuery("input[name='consultaRequisicoes:j_id_jsp_1184468779_41']").click();},
+                  function(){document.querySelector("input[name='consultaRequisicoes:j_id_jsp_1184468779_41']").click();},
                   100
                ); //confirmar busca
             }
@@ -313,8 +316,8 @@
          ****************************/
          if (window.location.pathname.indexOf("listagem_requisicoes") > -1){
             sessionStorage.setItem("processoFinalizaAuto",4);
-            jQuery("input[id='consultaRequisicoes:requisicoes:0:chkReq']").click(); //Seleciona requisição
-            jQuery("input[name='consultaRequisicoes:j_id_jsp_1184468779_166']").click(); //Clica em continuar
+            document.querySelector("input[id='consultaRequisicoes:requisicoes:0:chkReq']").click(); //Seleciona requisição
+            document.querySelector("input[name='consultaRequisicoes:j_id_jsp_1184468779_166']").click(); //Clica em continuar
          }
       }
 
@@ -340,7 +343,7 @@
                         setTimeout(
                            function(){
                               //Confirma a operação
-                              jQuery("input[name='confirmaOperacao:j_id_jsp_1655664044_42']").click();
+                              document.querySelector("input[name='confirmaOperacao:j_id_jsp_1655664044_42']").click();
                            },
                            3000 //Tempo de confirmar a operação
                         );
@@ -356,7 +359,7 @@
             Página pós confirmar alteração de status da OS
          */
          if (window.location.pathname.indexOf("confirmar_operacao") > -1){
-            jQuery("input[name='consultaRequisicoes:j_id_jsp_987653318_30']").click();
+            document.querySelector("input[name='consultaRequisicoes:j_id_jsp_987653318_30']").click();
          }
 
          /*
@@ -377,7 +380,7 @@
                ***************************************/
                sessionStorage.setItem("processoFinalizaAuto",3);
                setTimeout(
-                  function(){jQuery("input[name='consultaRequisicoes:j_id_jsp_1184468779_41']").click();},
+                  function(){document.querySelector("input[name='consultaRequisicoes:j_id_jsp_1184468779_41']").click();},
                   100
                ); //confirmar busca
             }
