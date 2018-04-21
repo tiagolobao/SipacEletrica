@@ -1,12 +1,11 @@
    // ==UserScript==
    // @name SipacEletrica_V2
    // @namespace https://github.com/tiagolobao/SipacEletrica_V2
-   // @version 2.0
+   // @version 1.1
    // @description Script para gerenciamento das ordens de serviço de forma automática no NOVO site do SIPAC-UFBA
    // @author Tiago Britto Lobão
    // @match https://sipac.ufba.br/*
    // @grant none
-   // @require http://code.jquery.com/jquery-latest.js
    // ==/UserScript==
 
    (function() {
@@ -27,34 +26,18 @@
       ******************************/
       function getProximaBusca(){
          /* Realizando uma nova busca de OS */
-         let requisit = [];
-         let acess = parseInt( sessionStorage.getItem("acessos") );
-         let input = sessionStorage.getItem("requisit");
-         let j=0;
-         let i;
-         let anterior=0;
-         input = ' ' + input; //Evitando que a primeira execução da substring exclua o primeiro caractere
-         input = input + ','; //Evitando que o algoritimo não pegue a ultima requisitão
-         for(i=0;i<=input.length;i++){
-            if(input[i] == ","){
-               requisit[j] = input.substring(anterior+1, i); //Separando em uma array cada requisição
-               j = j + 1; //Contando o número de requisições
-               anterior = i;
-            }
-         }
+         let numeroDeAcessos = parseInt( sessionStorage.getItem("acessos") );
+         let listaDeRequisicoes = sessionStorage.getItem("requisit").split(",").map( function(elem, index, arr){
+            return elem.split("/");
+         });
+
          /* Caso ainda existam requisições a serem finalizadas */
-         if( acess<requisit.length && requisit[acess].substring(0,barra)!="" ){
-            var barra;
-            sessionStorage.setItem("acessos",acess+1);
-            for(i=0;i<=requisit[acess].length;i++){
-               if(requisit[acess][i]=='/'){
-                     barra=i; //localizando a posição da barra que separa o numero da requisição do ano
-               }
-            }
+         if( numeroDeAcessos<listaDeRequisicoes.length && listaDeRequisicoes[0][0]!='' ){
+            sessionStorage.setItem("acessos",numeroDeAcessos+1);
             return {
                "keepGoing": true,
-               "numero": requisit[acess].substring(0,barra),
-               "ano": requisit[acess].substring(barra+1,requisit[acess].length+1)
+               "numero": listaDeRequisicoes[numeroDeAcessos][0],
+               "ano": listaDeRequisicoes[numeroDeAcessos][1]
             };
          }
          /* Caso não exista mais requisições a serem finalizadas */
@@ -141,38 +124,52 @@
          document.write( html );
       }
 
+      /***************************************************************************
+      Função equivalente ao jQuery(document).ready(function(){});
+      ****************************************************************************/
+      function ready(fn) {
+         if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading"){
+            fn();
+         } else {
+            document.addEventListener('DOMContentLoaded', fn);
+         }
+      }
+
       /*****************************************************************************
          CÓDIGO PARA A PÁGINA PRINCIPAL DO SIPAC - FORMULARIO E INTERFACE DE USUÁRIO
       ******************************************************************************/
       if(window.location.pathname.indexOf("index.jsf") > -1){
 
-         //Adicionando Formulário para entrada das requisições que se deseja finalizar
-         var htmlAppend =  '<center>';
-             htmlAppend += '<br>';
-             htmlAppend += '<style>textarea {resize: vertical;}</style>';
-             htmlAppend += '<h1> Finalização automática </h1>';
-             htmlAppend += '<h3> Separe as ordens de serviço por vírgulas. Espaços serão ignorados. Confira antes de clicar para finalizar </h3>';
-             htmlAppend += '<textarea id="finauto" rows="4" cols="60" placeholder="OS"> </textarea>';
-             htmlAppend += '<br>';
-             htmlAppend += '<button type="button" id="fibut">Finalizar!</button>';
-             htmlAppend += '</center>';
-         jQuery('#manutencao-menusupinfra').append(htmlAppend);
+         let abaManutencao = document.getElementById('manutencao-menusupinfra');
+         if(abaManutencao != null){
+            //Adicionando Formulário para entrada das requisições que se deseja finalizar
+            var htmlAppend =  '<center>';
+                htmlAppend += '<br>';
+                htmlAppend += '<style>textarea {resize: vertical;}</style>';
+                htmlAppend += '<h1> Finalização automática </h1>';
+                htmlAppend += '<h3> Separe as ordens de serviço por vírgulas. Espaços serão ignorados. Confira antes de clicar para finalizar </h3>';
+                htmlAppend += '<textarea id="finauto" rows="4" cols="60" placeholder="OS"> </textarea>';
+                htmlAppend += '<br>';
+                htmlAppend += '<button type="button" id="fibut">Finalizar!</button>';
+                htmlAppend += '</center>';
+            abaManutencao.innerHTML += htmlAppend;
 
-         //Ação de clicar para finalizar
-         /*
-            1 - É adicionado as variáveis de sessão para as finalizações
-            2 - Redireciona a página para alterar as requisições
-         */
-         jQuery("#fibut").on("click", function(){
-            var input = jQuery("#finauto").val();
-            input = input.replace(/ /g,''); //Removendo todos os espaços
-            sessionStorage.setItem("requisit",input);
-            sessionStorage.setItem("acessos",0);
-            sessionStorage.setItem("processoFinalizaAuto",1);
-            sessionStorage.setItem("emRotaVisita","");
-            sessionStorage.setItem("requisitRemanescentes","");
-            window.location.href = enderecoBuscaOsPreBusca;
-         });
+            //Ação de clicar para finalizar
+            /*
+               1 - É adicionado as variáveis de sessão para as finalizações
+               2 - Redireciona a página para alterar as requisições
+            */
+            document.getElementById("fibut").addEventListener('click', function(){
+               var input = document.getElementById("finauto").value;
+               input = input.replace(/ /g,''); //Removendo todos os espaços
+               sessionStorage.setItem("requisit",input);
+               sessionStorage.setItem("acessos",0);
+               sessionStorage.setItem("processoFinalizaAuto",1);
+               sessionStorage.setItem("emRotaVisita","");
+               sessionStorage.setItem("requisitRemanescentes","");
+               window.location.href = enderecoBuscaOsPreBusca;
+            });
+         }
       }
 
       // Estado em que a finalização automática se encontra
@@ -189,11 +186,11 @@
 
             let OS = getProximaBusca();
             if(OS.keepGoing){
-               jQuery("#consultaPorRequisicaoCheck").click();
-               jQuery("input[name='ordemServico.requisicao.numero']").val(OS.numero); //numero da req
-               jQuery("input[name='ordemServico.requisicao.ano']").val(OS.ano); //ano da req
+               document.getElementById('consultaPorRequisicaoCheck').checked = true; //Selecionando tipo de pesquisa
+               document.querySelector("input[name='ordemServico.requisicao.numero']").value = OS.numero;
+               document.querySelector("input[name='ordemServico.requisicao.ano']").value = OS.ano;
                setTimeout(
-                  function(){ jQuery( "#conteudo > form > table > tfoot >tr > td > input:nth-child(2)" ).click(); },
+                  () => document.querySelector("#conteudo > form > table > tfoot >tr > td > input:nth-child(2)").click(),
                   100
                );
             }
@@ -209,39 +206,56 @@
                CÓDIGO PARA CLICAR EM ALTERAR OS CASO ESTEJA NO PROCESSO DE FINALIZAÇÃO AUTOMATICA
          *************************************************************************/
          if (window.location.pathname.indexOf("buscaOS") > -1){
+            var parser = new DOMParser();
             //Espera a página terminar de carregar
-            jQuery(document).ready( function() {
+            ready( function() {
                /*Obtem informação de qual é o status da OS*/
                //Obtendo endereço para pegar status da OS
-               let onclickOS = jQuery("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a ").attr('onclick');
-               let numOS =  jQuery("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a").html();
-               let enderecoStatusOS = "https://sipac.ufba.br" + onclickOS.substr(13, onclickOS.indexOf("&popup=popup") - 1);
-               //Pegando informações da página
-               jQuery.ajax(enderecoStatusOS).done(function(page) {
-                  var response = jQuery(page).find('div[id="container-popup"] > table > tbody > tr > td > table > tbody > tr:nth-child(5) > td').text();
-                  response = response.replace(/(\r\n\t|\n|\r\t)/gm,"");
-                  //Separando OS EM ROTA VISITA das outras
-                  if(response == '		   			EM ROTA VISITA				'){
-                     let buffer = sessionStorage.getItem("emRotaVisita");
-                     buffer += "," + numOS.replace(/ /g,'');
-                     sessionStorage.setItem("emRotaVisita",buffer);
-                  }
-                  else{
-                     let buffer = sessionStorage.getItem("requisitRemanescentes");
-                     buffer += "," + numOS.replace(/ /g,'');
-                     sessionStorage.setItem("requisitRemanescentes",buffer);
-                  }
-                  /* Confere se é o momento certo de clicar para alterar a OS
-                     1 - Deve estar ativo o processo de finalização automatica
-                     2 - Deve acontecer apenas depois que buscar a OS correta a se finalizar
-                  */
-                  let enderecoPaginaAtual = window.location.href; //1
-                  let processoFinalizaAuto = sessionStorage.getItem("processoFinalizaAuto"); //2
-                  if(enderecoPaginaAtual != enderecoBuscaOsPreBusca && processoFinalizaAuto){
-                     let url = jQuery("#conteudo > table > tbody > tr >  td:nth-child(10) > a ").prop("href");
-                     jQuery(location).attr("href", url);
-                  }
-               });
+               let onClickOS = document.querySelector("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a ").getAttribute("onclick");
+               let numOS = document.querySelector("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a").innerHTML;
+               let enderecoStatusOS = "https://sipac.ufba.br" + onClickOS.substr(13, onClickOS.indexOf("&popup=popup") - 1);
+
+               //Pegando informações da página VIA AJAX ******
+               let request = new XMLHttpRequest();
+               request.open('GET', enderecoStatusOS, true);
+               request.onload = function() {
+                 if (request.status >= 200 && request.status < 400) {
+                    let pageString = request.responseText
+                    let page = parser.parseFromString(pageString, "text/html");
+                    let response = page.querySelector('div[id="container-popup"] > table > tbody > tr > td > table > tbody > tr:nth-child(5) > td').innerHTML;
+                    response = response.replace(/(\r\n\t|\n|\r\t)/gm,"");
+                    //Separando OS EM ROTA VISITA das outras
+                    if(response == '		   			EM ROTA VISITA				'){
+                       let buffer = sessionStorage.getItem("emRotaVisita");
+                       buffer += "," + numOS.replace(/ /g,'');
+                       sessionStorage.setItem("emRotaVisita",buffer);
+                    }
+                    else{
+                       let buffer = sessionStorage.getItem("requisitRemanescentes");
+                       buffer += "," + numOS.replace(/ /g,'');
+                       sessionStorage.setItem("requisitRemanescentes",buffer);
+                    }
+                    /* Confere se é o momento certo de clicar para alterar a OS
+                       1 - Deve estar ativo o processo de finalização automatica
+                       2 - Deve acontecer apenas depois que buscar a OS correta a se finalizar
+                    */
+                    let enderecoPaginaAtual = window.location.href; //1
+                    let processoFinalizaAuto = sessionStorage.getItem("processoFinalizaAuto"); //2
+                    if(enderecoPaginaAtual != enderecoBuscaOsPreBusca && processoFinalizaAuto){
+                       let url = document.querySelector("#conteudo > table > tbody > tr >  td:nth-child(10) > a ").href;
+                       location.href = url;
+                    }
+                 } else {
+                   // We reached our target server, but it returned an error
+                   console.error("Não foi possível obter o conteúdo da OS " + numOS);
+                 }
+               };
+               request.onerror = function() {
+                 // There was a connection error of some sort
+                 console.error("Não foi possível obter o conteúdo da OS " + numOS);
+               };
+               request.send();
+               //*FIM DO CÓDIGO AJAX */
             });
          }
          /*************************************************************************
@@ -252,12 +266,18 @@
          *************************************************************************/
          if (window.location.pathname.indexOf("cadastraOS") > -1){
 
-            jQuery('[id="ordemServicoForm:statusOrdemServico"]').val('1'); //Muda o status para concluída
-            jQuery("textarea[name='ordemServicoForm:j_id_jsp_2030603547_110']").val("Serviço executado."); //Muda o Diagnostico de Vistoria
-            /*
-            Esse ação acaba funcionando por coincidencia para clicar no botão "Alterar" e no "Alterar Outra Ordem de Serviço"
-            */
-            setTimeout(function(){ jQuery( "tfoot > tr > td > input:nth-child(1)" ).click(); }, 2500);
+            //Conferindo se existe o elemento antes de muda-lo
+            if(document.getElementById("ordemServicoForm:statusOrdemServico") != null){
+               document.getElementById("ordemServicoForm:statusOrdemServico").value = '1'; //Muda o status para concluída
+               document.querySelector("textarea[name='ordemServicoForm:j_id_jsp_2030603547_110']").value = "Serviço executado."; //Muda o Diagnostico de Vistoria
+            }
+
+            //Click para alterar OS
+            if(document.getElementsByName("ordemServicoForm:j_id_jsp_2030603547_131")[0] != null)
+               setTimeout(function(){ document.getElementsByName("ordemServicoForm:j_id_jsp_2030603547_131")[0].click(); }, 2500);
+            //Click para voltar busca de OS (Botão "Alterar Outra Ordem de Serviço")
+            else if(document.getElementsByName("j_id_jsp_1084759112_1:j_id_jsp_1084759112_35")[0] != null)
+               setTimeout(function(){ document.getElementsByName("j_id_jsp_1084759112_1:j_id_jsp_1084759112_35")[0].click(); }, 2500);
          }
       }
 
@@ -291,11 +311,11 @@
 
             let OS = getProximaBusca();
             if(OS.keepGoing){
-               jQuery("input[id='consultaRequisicoes:ckNumeroAno']").click(); //clique opção de busca
-               jQuery("input[id='consultaRequisicoes:numRequisicao']").val(OS.numero); //número da requisição
-               jQuery("input[id='consultaRequisicoes:anoRequisicao']").val(OS.ano); //ano da requisição
+               document.getElementById('consultaRequisicoes:ckNumeroAno').checked = true; //Selecionando tipo de pesquisa
+               document.getElementById('consultaRequisicoes:numRequisicao').value = OS.numero;
+               document.getElementById('consultaRequisicoes:anoRequisicao').value = OS.ano;
                setTimeout(
-                  function(){jQuery("input[name='consultaRequisicoes:j_id_jsp_1184468779_41']").click();},
+                  function(){document.querySelector("input[name='consultaRequisicoes:j_id_jsp_1184468779_41']").click();},
                   100
                ); //confirmar busca
             }
@@ -310,8 +330,8 @@
          ****************************/
          if (window.location.pathname.indexOf("listagem_requisicoes") > -1){
             sessionStorage.setItem("processoFinalizaAuto",4);
-            jQuery("input[id='consultaRequisicoes:requisicoes:0:chkReq']").click(); //Seleciona requisição
-            jQuery("input[name='consultaRequisicoes:j_id_jsp_1184468779_166']").click(); //Clica em continuar
+            document.querySelector("input[id='consultaRequisicoes:requisicoes:0:chkReq']").click(); //Seleciona requisição
+            document.querySelector("input[name='consultaRequisicoes:j_id_jsp_1184468779_166']").click(); //Clica em continuar
          }
       }
 
@@ -324,20 +344,20 @@
             Página pós seleção de OS para mudar status
          */
          if (window.location.pathname.indexOf("listagem_requisicoes") > -1){
-            jQuery("select[name='confirmaOperacao:j_id_jsp_1655664044_4']").val("1"); //Seleciona Serviço executado
+            document.querySelector("select[name='confirmaOperacao:j_id_jsp_1655664044_4']").value = "1"; //Seleciona Serviço executado
             confirmChangeServicoExecutado(); //Necessário para aparecer a opção de quantidade de horas
             setTimeout(
                function(){
                   //Quantidade de horas
-                  jQuery("input[name='confirmaOperacao:requisicoes:0:j_id_jsp_1655664044_41']").val("8");
+                  document.querySelector("input[name='confirmaOperacao:requisicoes:0:j_id_jsp_1655664044_41']").value = "8";
                   setTimeout(
                      function(){
                         //Evita o aparecimento do alerta
-                        jQuery("input[name='confirmaOperacao:j_id_jsp_1655664044_42']").attr("onclick","return true;");
+                        document.querySelector("input[name='confirmaOperacao:j_id_jsp_1655664044_42']").setAttribute("onclick", "return true;");
                         setTimeout(
                            function(){
                               //Confirma a operação
-                              jQuery("input[name='confirmaOperacao:j_id_jsp_1655664044_42']").click();
+                              document.querySelector("input[name='confirmaOperacao:j_id_jsp_1655664044_42']").click();
                            },
                            3000 //Tempo de confirmar a operação
                         );
@@ -353,7 +373,7 @@
             Página pós confirmar alteração de status da OS
          */
          if (window.location.pathname.indexOf("confirmar_operacao") > -1){
-            jQuery("input[name='consultaRequisicoes:j_id_jsp_987653318_30']").click();
+            document.querySelector("input[name='consultaRequisicoes:j_id_jsp_987653318_30']").click();
          }
 
          /*
@@ -364,9 +384,9 @@
 
             let OS = getProximaBusca();
             if(OS.keepGoing){
-               jQuery("input[id='consultaRequisicoes:ckNumeroAno']").prop("checked",true); //Selecionando tipo de pesquisa
-               jQuery("input[id='consultaRequisicoes:numRequisicao']").val(OS.numero); //número da requisição
-               jQuery("input[id='consultaRequisicoes:anoRequisicao']").val(OS.ano); //ano da requisição
+               document.getElementById('consultaRequisicoes:ckNumeroAno').checked = true; //Selecionando tipo de pesquisa
+               document.getElementById('consultaRequisicoes:numRequisicao').value = OS.numero;
+               document.getElementById('consultaRequisicoes:anoRequisicao').value = OS.ano;
                /************************************
                   MOMENTO QUE PODE GERAR CONFUSÃO
                   É NECESSÁRIO VOLTAR PARA O PASSO 3 NESSE MOMENTO POIS VOLTA PRA PÁGINA "listagem_requisicoes"
@@ -374,7 +394,7 @@
                ***************************************/
                sessionStorage.setItem("processoFinalizaAuto",3);
                setTimeout(
-                  function(){jQuery("input[name='consultaRequisicoes:j_id_jsp_1184468779_41']").click();},
+                  function(){document.querySelector("input[name='consultaRequisicoes:j_id_jsp_1184468779_41']").click();},
                   100
                ); //confirmar busca
             }
