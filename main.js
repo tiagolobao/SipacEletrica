@@ -6,7 +6,6 @@
    // @author Tiago Britto Lobão
    // @match https://sipac.ufba.br/*
    // @grant none
-   // @require http://code.jquery.com/jquery-latest.js
    // ==/UserScript==
 
    (function() {
@@ -215,33 +214,48 @@
                let onClickOS = document.querySelector("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a ").getAttribute("onclick");
                let numOS = document.querySelector("#conteudo > table.listagem > tbody > tr > td:nth-child(5) > a").innerHTML;
                let enderecoStatusOS = "https://sipac.ufba.br" + onClickOS.substr(13, onClickOS.indexOf("&popup=popup") - 1);
-               //Pegando informações da página
-               jQuery.ajax(enderecoStatusOS).done(function(pageString) {
-                  let page = parser.parseFromString(pageString, "text/html");
-                  var response = page.querySelector('div[id="container-popup"] > table > tbody > tr > td > table > tbody > tr:nth-child(5) > td').innerHTML;
-                  response = response.replace(/(\r\n\t|\n|\r\t)/gm,"");
-                  //Separando OS EM ROTA VISITA das outras
-                  if(response == '		   			EM ROTA VISITA				'){
-                     let buffer = sessionStorage.getItem("emRotaVisita");
-                     buffer += "," + numOS.replace(/ /g,'');
-                     sessionStorage.setItem("emRotaVisita",buffer);
-                  }
-                  else{
-                     let buffer = sessionStorage.getItem("requisitRemanescentes");
-                     buffer += "," + numOS.replace(/ /g,'');
-                     sessionStorage.setItem("requisitRemanescentes",buffer);
-                  }
-                  /* Confere se é o momento certo de clicar para alterar a OS
-                     1 - Deve estar ativo o processo de finalização automatica
-                     2 - Deve acontecer apenas depois que buscar a OS correta a se finalizar
-                  */
-                  let enderecoPaginaAtual = window.location.href; //1
-                  let processoFinalizaAuto = sessionStorage.getItem("processoFinalizaAuto"); //2
-                  if(enderecoPaginaAtual != enderecoBuscaOsPreBusca && processoFinalizaAuto){
-                     let url = document.querySelector("#conteudo > table > tbody > tr >  td:nth-child(10) > a ").href;
-                     location.href = url;
-                  }
-               });
+
+               //Pegando informações da página VIA AJAX ******
+               let request = new XMLHttpRequest();
+               request.open('GET', enderecoStatusOS, true);
+               request.onload = function() {
+                 if (request.status >= 200 && request.status < 400) {
+                    let pageString = request.responseText
+                    let page = parser.parseFromString(pageString, "text/html");
+                    let response = page.querySelector('div[id="container-popup"] > table > tbody > tr > td > table > tbody > tr:nth-child(5) > td').innerHTML;
+                    response = response.replace(/(\r\n\t|\n|\r\t)/gm,"");
+                    //Separando OS EM ROTA VISITA das outras
+                    if(response == '		   			EM ROTA VISITA				'){
+                       let buffer = sessionStorage.getItem("emRotaVisita");
+                       buffer += "," + numOS.replace(/ /g,'');
+                       sessionStorage.setItem("emRotaVisita",buffer);
+                    }
+                    else{
+                       let buffer = sessionStorage.getItem("requisitRemanescentes");
+                       buffer += "," + numOS.replace(/ /g,'');
+                       sessionStorage.setItem("requisitRemanescentes",buffer);
+                    }
+                    /* Confere se é o momento certo de clicar para alterar a OS
+                       1 - Deve estar ativo o processo de finalização automatica
+                       2 - Deve acontecer apenas depois que buscar a OS correta a se finalizar
+                    */
+                    let enderecoPaginaAtual = window.location.href; //1
+                    let processoFinalizaAuto = sessionStorage.getItem("processoFinalizaAuto"); //2
+                    if(enderecoPaginaAtual != enderecoBuscaOsPreBusca && processoFinalizaAuto){
+                       let url = document.querySelector("#conteudo > table > tbody > tr >  td:nth-child(10) > a ").href;
+                       location.href = url;
+                    }
+                 } else {
+                   // We reached our target server, but it returned an error
+                   console.error("Não foi possível obter o conteúdo da OS " + numOS);
+                 }
+               };
+               request.onerror = function() {
+                 // There was a connection error of some sort
+                 console.error("Não foi possível obter o conteúdo da OS " + numOS);
+               };
+               request.send();
+               //*FIM DO CÓDIGO AJAX */
             });
          }
          /*************************************************************************
