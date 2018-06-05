@@ -236,7 +236,7 @@
                     let response = page.querySelector('div[id="container-popup"] > table > tbody > tr > td > table > tbody > tr:nth-child(5) > td').innerHTML;
                     response = response.replace(/(\r\n\t|\n|\r\t)/gm,"");
                     //Separando OS EM ROTA VISITA das outras
-                    if(response == '		   			EM ROTA VISITA				'){
+                    if(response == '		   			EM ROTA VISITA				' || response == '		   			EM EXECUÇÃO				'){
                        let buffer = sessionStorage.getItem("emRotaVisita");
                        buffer += "," + numOS.replace(/ /g,'');
                        sessionStorage.setItem("emRotaVisita",buffer);
