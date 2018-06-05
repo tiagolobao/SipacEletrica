@@ -135,6 +135,17 @@
          }
       }
 
+      /***************************************************************************
+      Função para obter string com data atual
+      ****************************************************************************/
+      function getHoje() {
+        let d = new Date();
+        let dateString = ( d.getDate()<10 ? "0"+d.getDate() : d.getDate() );
+        dateString    += "/";
+        dateString    += ( d.getMonth()<10 ? "0"+d.getMonth() : d.getMonth() );
+        dateString    += "/";
+        dateString    += d.getFullYear();
+      }
       /*****************************************************************************
          CÓDIGO PARA A PÁGINA PRINCIPAL DO SIPAC - FORMULARIO E INTERFACE DE USUÁRIO
       ******************************************************************************/
@@ -275,6 +286,9 @@
             //Click para alterar OS
             if(document.getElementsByName("ordemServicoForm:j_id_jsp_2030603547_131")[0] != null)
                setTimeout(function(){ document.getElementsByName("ordemServicoForm:j_id_jsp_2030603547_131")[0].click(); }, 2500);
+            //Alterando a data de conclusão
+            if(document.getElementById("ordemServicoForm:dataExecucao") != null)
+              document.getElementById("ordemServicoForm:dataExecucao").value = getHoje();
             //Click para voltar busca de OS (Botão "Alterar Outra Ordem de Serviço")
             else if(document.getElementsByName("j_id_jsp_1084759112_1:j_id_jsp_1084759112_35")[0] != null)
                setTimeout(function(){ document.getElementsByName("j_id_jsp_1084759112_1:j_id_jsp_1084759112_35")[0].click(); }, 2500);
