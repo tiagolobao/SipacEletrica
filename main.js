@@ -145,6 +145,7 @@
         dateString    += ( d.getMonth()<10 ? "0"+d.getMonth() : d.getMonth() );
         dateString    += "/";
         dateString    += d.getFullYear();
+        return dateString;
       }
       /*****************************************************************************
          CÓDIGO PARA A PÁGINA PRINCIPAL DO SIPAC - FORMULARIO E INTERFACE DE USUÁRIO
