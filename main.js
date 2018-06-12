@@ -160,6 +160,7 @@
                sessionStorage.setItem("processoFinalizaAuto",1);
                sessionStorage.setItem("emRotaVisita","");
                sessionStorage.setItem("requisitRemanescentes","");
+               sessionStorage.setItem("erros","");
                window.location.href = enderecoBuscaOsPreBusca;
             });
          }
@@ -240,12 +241,14 @@
                     }
                  } else {
                    // We reached our target server, but it returned an error
-                   console.error("Não foi possível obter o conteúdo da OS " + numOS);
+                   let temp_erros = sessionStorage.getItem("erros");
+                   sessionStorage.setItem("erros",a+"Não foi possível obter o conteúdo da OS " + numOS + '... Servior retornou erro');
                  }
                };
                request.onerror = function() {
                  // There was a connection error of some sort
-                 console.error("Não foi possível obter o conteúdo da OS " + numOS);
+                 let temp_erros = sessionStorage.getItem("erros");
+                 sessionStorage.setItem("erros",a+"Não foi possível obter o conteúdo da OS " + numOS + '... Erro de conexão');
                };
                request.send();
                //*FIM DO CÓDIGO AJAX */
