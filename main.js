@@ -85,25 +85,6 @@
       }
 
       /***************************************************************************
-      Gera página web para mostrar Requisições que não foram totalmente finalizadas
-      porque não estavam como em rota visita - DEPRECATED
-      ****************************************************************************/
-      function paginaOsRemanescentes(){
-         let html = "<head>";
-         html += "";
-         html += "</head>";
-         html += "<body>";
-            html += "<p>";
-               html += sessionStorage.getItem("requisitRemanescentes");
-            html += "</p>";
-            html += "<a href='" + enderecoPaginaPrincipal + "'>";
-               html += " Voltar ";
-            html += "</a>";
-         html += "</body>";
-         return html;
-      }
-
-      /***************************************************************************
       Termina o processo de finalização, apagando as variáveis de sessão e abrindo página com informações
       ****************************************************************************/
       function terminaFinalizacoes(){
