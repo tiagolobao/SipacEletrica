@@ -99,20 +99,20 @@
            html += '</style>';
          html += '</head>';
          html += '<body>';
-           html += '<header><h1> As finalizações foram concluidas! </h1><div> <table><tr><td> Criado por Tiago Lobão </td><td><a href="https://github.com/tiagolobao"> <i class="fa fa-github"></i> </a></td><td><a href="https://twitter.com/tiago_blobao"> <i class="fa fa-twitter"></i> </a></td><td><a href="https://www.instagram.com/lobao_tiago/"> <i class="fa fa-instagram"></i> </a></td></tr></table> </div></header>';
+           html += '<header><h1> As finalizações foram concluidas! </h1><div> <table><tr><td> Criado por Tiago Lobão </td><td><a href="https://github.com/tiagolobao" > <i class="fa fa-github"></i> </a></td><td><a href="https://twitter.com/tiago_blobao" class="content-footer"> <i class="fa fa-twitter"></i> </a></td><td><a href="https://www.instagram.com/lobao_tiago/"> <i class="fa fa-instagram"></i> </a></td></tr></table> </div></header>';
            html += '<div class="content"><section id="reqFin"><h2> Requisições Finalizadas<i class="fa fa-angle-right"></i></h2><span class="hidden"><textarea readonly cols="35" rows="1">';
            html += (sessionStorage.getItem("requisit") == '' ? 'Sem requisições' : sessionStorage.getItem("requisit"));
            html += '</textarea><i class="fa fa-copy"></i></span></section><section id="reqMat"><h2> Requisições com espera de Material <i class="fa fa-angle-right"></i></h2><span class="hidden"><textarea readonly cols="35" rows="1">';
-           html += (sessionStorage.getItem("requisitRemanescentes") == '' ? 'Sem requisições' : sessionStorage.getItem("requisitRemanescentes"));
+           html += (sessionStorage.getItem("requisitRemanescentes") == '' ? 'Sem requisições' : sessionStorage.getItem("requisitRemanescentes").substr(1));
            html += '</textarea><i class="fa fa-copy"></i></span> </section> <section id="reqNaoAlterada"> <h2> Requisições que já estavam finalizadas <i class="fa fa-angle-right"></i></h2> <span class="hidden"><textarea readonly cols="35" rows="1">'
-           html += (sessionStorage.getItem("jaFinalizadas") == '' ? 'Sem requisições' : sessionStorage.getItem("jaFinalizadas"));
+           html += (sessionStorage.getItem("jaFinalizadas") == '' ? 'Sem requisições' : sessionStorage.getItem("jaFinalizadas").substr(1));
            html += '</textarea><i class="fa fa-copy"></i></span></section><section id="erros"><h2> Erros <i class="fa fa-angle-right"></i></h2><span class="hidden">';
            html += (sessionStorage.getItem("erros") == '' ? 'Sem erros encontrados' : sessionStorage.getItem("erros"));
            html += '</span></section></div>';
            html += '<footer><a href="https://sipac.ufba.br/sipac/supinfra/index.jsf">Voltar ao SIPAC</a><a href="https://github.com/tiagolobao/SipacEletrica_V2/issues">Reportar Erros</a><a href="http://www.pudim.com.br">Ir para o site mais legal de todos</a></footer>';
             html += '<script type="text/javascript">';
-              html += 'function copyClipboard(sectionID){let queryElement=document.getElementById(sectionID);queryElement.getElementsByTagName("i")[0].addEventListener("click",()=>{let copyText=queryElement.getElementsByTagName("textarea")[0];copyText.select();document.execCommand("copy");});}function toggleHiddenContent(sectionID){let queryElement=document.getElementById(sectionID);queryElement.getElementsByTagName("i")[0].addEventListener("click",()=>{queryElement.getElementsByTagName("span")[0].classList.toggle("hidden");queryElement.getElementsByTagName("i")[0].classList.toggle("fa-angle-right");queryElement.getElementsByTagName("i")[0].classList.toggle("fa-angle-down");});}';
-              html += 'copyClipboard("reqFin");copyClipboard("reqMat");toggleHiddenContent("reqFin");toggleHiddenContent("reqMat");toggleHiddenContent("reqNaoAlterada");toggleHiddenContent("erros");';
+              html += 'function copyClipboard(sectionID){let queryElement=document.getElementById(sectionID);queryElement.getElementsByTagName("i")[1].addEventListener("click",()=>{let copyText=queryElement.getElementsByTagName("textarea")[0];copyText.select();document.execCommand("copy");});}function toggleHiddenContent(sectionID){let queryElement=document.getElementById(sectionID);queryElement.getElementsByTagName("i")[0].addEventListener("click",()=>{queryElement.getElementsByTagName("span")[0].classList.toggle("hidden");queryElement.getElementsByTagName("i")[0].classList.toggle("fa-angle-right");queryElement.getElementsByTagName("i")[0].classList.toggle("fa-angle-down");});}';
+              html += 'copyClipboard("reqFin");copyClipboard("reqMat");copyClipboard("reqNaoAlterada");toggleHiddenContent("reqFin");toggleHiddenContent("reqMat");toggleHiddenContent("reqNaoAlterada");toggleHiddenContent("erros");';
             html += '</script>';
          html += '</body>';
          html += '</html>'
