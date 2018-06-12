@@ -160,6 +160,7 @@
                sessionStorage.setItem("processoFinalizaAuto",1);
                sessionStorage.setItem("emRotaVisita","");
                sessionStorage.setItem("requisitRemanescentes","");
+               sessionStorage.setItem("jaFinalizadas","");
                sessionStorage.setItem("erros","");
                window.location.href = enderecoBuscaOsPreBusca;
             });
@@ -223,6 +224,11 @@
                        let buffer = sessionStorage.getItem("emRotaVisita");
                        buffer += "," + numOS.replace(/ /g,'');
                        sessionStorage.setItem("emRotaVisita",buffer);
+                    }
+                    else if("		   			FINALIZADA				"){
+                      let buffer = sessionStorage.getItem("jaFinalizadas");
+                      buffer += "," + numOS.replace(/ /g,'');
+                      sessionStorage.setItem("jaFinalizadas",buffer);
                     }
                     else{
                        let buffer = sessionStorage.getItem("requisitRemanescentes");
