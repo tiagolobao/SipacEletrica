@@ -88,19 +88,34 @@
       Termina o processo de finalização, apagando as variáveis de sessão e abrindo página com informações
       ****************************************************************************/
       function terminaFinalizacoes(){
-         alert("As ordens de serviço foram finalizadas");
          document.open();
-         let html = "<head>";
-         html += "";
-         html += "</head>";
-         html += "<body>";
-            html += "<p>";
-               html += sessionStorage.getItem("requisitRemanescentes");
-            html += "</p>";
-            html += "<a href='" + enderecoPaginaPrincipal + "'>";
-               html += " Voltar ";
-            html += "</a>";
-         html += "</body>";
+         let html = '<!DOCTYPE html>';
+         html = '<head>';
+           html += '<title>SIPAC - Log de Finalizações</title>';
+           html += '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
+           html += '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">';
+           html += '<style>';
+           html += '@import "https://fonts.googleapis.com/css?family=Dosis";body{margin:0;margin-top:-20px;font-family:"Dosis",sans-serif}footer{position:fixed;right:0;bottom:0;left:0;padding:1rem;background-color:#4286f4;color:#4286f4;padding:0 0 0 0;text-align:center;z-index:1;padding:10px 20px 10px 20px}footer a{background-color:#fff;border-radius:5px;padding:10px;text-decoration:none;line-height:50px;text-overflow:ellipsis;white-space:nowrap}footer a:visited{color:#4286f4}footer a:hover{background-color:blue}footer > table{margin:0 auto}header{box-sizing:border-box;color:#fff;width:100%;background-color:#4286f4;padding:30px}header div{float:right}div.content{color:#000;margin:20px 20px 100px 0;padding:20px}.fa{font-size:25px!important}header i.fa{color:#fff}section i.fa{margin-left:6px}span.hidden{display:none}';
+           html += '</style>';
+         html += '</head>';
+         html += '<body>';
+           html += '<header><h1> As finalizações foram concluidas! </h1><div> <table><tr><td> Criado por Tiago Lobão </td><td><a href="https://github.com/tiagolobao" class="content-footer"> <i class="fa fa-github"></i> </a></td><td><a href="https://twitter.com/tiago_blobao" class="content-footer"> <i class="fa fa-twitter"></i> </a></td></tr></table> </div></header>';
+           html += '<div class="content"><section id="reqFin"><h2> Requisições Finalizadas<i class="fa fa-angle-right"></i></h2><span class="hidden"><textarea readonly cols="35" rows="1">';
+           html += (sessionStorage.getItem("requisit") == '' ? 'Sem requisições' : sessionStorage.getItem("requisit"));
+           html += '</textarea><i class="fa fa-copy"></i></span></section><section id="reqMat"><h2> Requisições com espera de Material <i class="fa fa-angle-right"></i></h2><span class="hidden"><textarea readonly cols="35" rows="1">';
+           html += (sessionStorage.getItem("requisitRemanescentes") == '' ? 'Sem requisições' : sessionStorage.getItem("requisitRemanescentes"));
+           html += '</textarea><i class="fa fa-copy"></i></span> </section> <section id="reqNaoAlterada"> <h2> Requisições que já estavam finalizadas <i class="fa fa-angle-right"></i></h2> <span class="hidden"><textarea readonly cols="35" rows="1">'
+           html += (sessionStorage.getItem("jaFinalizadas") == '' ? 'Sem requisições' : sessionStorage.getItem("jaFinalizadas"));
+           html += '</textarea><i class="fa fa-copy"></i></span></section><section id="erros"><h2> Erros <i class="fa fa-angle-right"></i></h2><span class="hidden">';
+           html += (sessionStorage.getItem("erros") == '' ? 'Sem erros encontrados' : sessionStorage.getItem("erros"));
+           html += '</span></section></div>';
+           html += '<footer><a href="https://sipac.ufba.br/sipac/supinfra/index.jsf">Voltar ao SIPAC</a><a href="https://github.com/tiagolobao/SipacEletrica_V2/issues">Reportar Erros</a><a href="http://www.pudim.com.br">Ir para o site mais legal de todos</a></footer>';
+            html += '<script type="text/javascript">';
+              html += 'function copyClipboard(sectionID){let queryElement=document.getElementById(sectionID);queryElement.getElementsByTagName("i")[0].addEventListener("click",()=>{let copyText=queryElement.getElementsByTagName("textarea")[0];copyText.select();document.execCommand("copy");});}function toggleHiddenContent(sectionID){let queryElement=document.getElementById(sectionID);queryElement.getElementsByTagName("i")[0].addEventListener("click",()=>{queryElement.getElementsByTagName("span")[0].classList.toggle("hidden");queryElement.getElementsByTagName("i")[0].classList.toggle("fa-angle-right");queryElement.getElementsByTagName("i")[0].classList.toggle("fa-angle-down");});}';
+              html += 'copyClipboard("reqFin");copyClipboard("reqMat");toggleHiddenContent("reqFin");toggleHiddenContent("reqMat");toggleHiddenContent("reqNaoAlterada");toggleHiddenContent("erros");';
+            html += '</script>';
+         html += '</body>';
+         html += '</html>'
          sessionStorage.clear();
          document.write( html );
       }
