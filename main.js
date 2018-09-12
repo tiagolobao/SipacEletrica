@@ -240,12 +240,12 @@
                        buffer += "," + numOS.replace(/ /g,'');
                        sessionStorage.setItem("emRotaVisita",buffer);
                     }
-                    else if("		   			FINALIZADA				"){
+                    else if(response == "		   			FINALIZADA				"){
                       let buffer = sessionStorage.getItem("jaFinalizadas");
                       buffer += "," + numOS.replace(/ /g,'');
                       sessionStorage.setItem("jaFinalizadas",buffer);
                     }
-                    else{
+                    else{ //Com espera de material
                        let buffer = sessionStorage.getItem("requisitRemanescentes");
                        buffer += "," + numOS.replace(/ /g,'');
                        sessionStorage.setItem("requisitRemanescentes",buffer);
