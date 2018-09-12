@@ -1,7 +1,7 @@
    // ==UserScript==
    // @name SipacEletrica_V2
    // @namespace https://github.com/tiagolobao/SipacEletrica_V2
-   // @version 1.2.1
+   // @version 1.2.2
    // @description Script para gerenciamento das ordens de serviço de forma automática no NOVO site do SIPAC-UFBA
    // @author Tiago Britto Lobão
    // @match https://sipac.ufba.br/*
