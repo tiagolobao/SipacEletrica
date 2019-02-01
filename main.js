@@ -102,7 +102,72 @@
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
               <style>
-                @import "https://fonts.googleapis.com/css?family=Dosis";body{margin:0;margin-top:-20px;font-family:"Dosis",sans-serif}footer{position:fixed;right:0;bottom:0;left:0;padding:1rem;background-color:#4286f4;color:#4286f4;padding:0 0 0 0;text-align:center;z-index:1;padding:10px 20px 10px 20px}footer a{background-color:#fff;border-radius:5px;padding:10px;text-decoration:none;line-height:50px;text-overflow:ellipsis;white-space:nowrap}footer a:visited{color:#4286f4}foot
+                @import "https://fonts.googleapis.com/css?family=Dosis";
+                body{
+                  margin:0;
+                  margin-top:-20px;
+                  font-family:"Dosis",sans-serif;
+                }
+                footer{
+                  position:fixed;
+                  right:0;
+                  bottom:0;
+                  left:0;
+                  padding:1rem;
+                  background-color:#4286f4;
+                  color:#4286f4;
+                  padding:0 0 0 0;
+                  text-align:center;
+                  z-index:1;
+                  padding:10px 20px 10px 20px;
+                }
+                footer a{
+                  background-color:#fff;
+                  border-radius:5px;
+                  padding:10px;
+                  text-decoration:none;
+                  line-height:50px;
+                  text-overflow:ellipsis;white-space:nowrap;
+                }
+                footer a:visited{
+                  color:#4286f4;
+                }
+                footer a:hover{
+                  background-color:blue;
+                }
+                footer > table{
+                  margin:0 auto;
+                }
+                header td{
+                  color:#fff;
+                }
+                header{
+                  box-sizing:border-box;
+                  color:#fff;
+                  width:100%;
+                  background-color:#4286f4;
+                  padding:30px;
+                }
+                header div{
+                  float:right;
+                }
+                div.content{
+                  color:#000;
+                  margin:20px 20px 100px 0;
+                  padding:20px;
+                }
+                .fa{
+                  font-size:25px!important;
+                }
+                header i.fa{
+                  color:#fff;
+                }
+                section i.fa{
+                  margin-left:6px;
+                }
+                span.hidden{
+                  display:none;
+                }
               </style>
             </head>
             <body>
@@ -148,7 +213,32 @@
                 <a href="https://sipac.ufba.br/sipac/supinfra/index.jsf">Voltar ao SIPAC</a><a href="https://github.com/tiagolobao/SipacEletrica_V2/issues">Reportar Erros</a><a href="http://www.pudim.com.br">Ir para o site mais legal de todos</a>
               </footer>
               <script type="text/javascript">
-                copyClipboard("reqFin");copyClipboard("reqMat");copyClipboard("reqNaoAlterada");toggleHiddenContent("reqFin");toggleHiddenContent("reqMat");toggleHiddenContent("reqNaoAlterada");toggleHiddenContent("erros");
+
+                function copyClipboard(sectionID){
+                  let queryElement=document.getElementById(sectionID);
+                  queryElement.getElementsByTagName("i")[1].addEventListener("click",()=>{
+                    let copyText=queryElement.getElementsByTagName("textarea")[0];
+                    copyText.select();
+                    document.execCommand("copy");
+                  });
+                }
+
+                function toggleHiddenContent(sectionID){
+                  let queryElement=document.getElementById(sectionID);
+                  queryElement.getElementsByTagName("i")[0].addEventListener("click",()=>{
+                    queryElement.getElementsByTagName("span")[0].classList.toggle("hidden");
+                    queryElement.getElementsByTagName("i")[0].classList.toggle("fa-angle-right");
+                    queryElement.getElementsByTagName("i")[0].classList.toggle("fa-angle-down");
+                  });
+                }
+
+                copyClipboard("reqFin");
+                copyClipboard("reqMat");
+                copyClipboard("reqNaoAlterada");
+                toggleHiddenContent("reqFin");
+                toggleHiddenContent("reqMat");
+                toggleHiddenContent("reqNaoAlterada");
+                toggleHiddenContent("erros");
               </script>
             </body>
           </html>
