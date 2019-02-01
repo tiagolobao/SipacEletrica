@@ -336,8 +336,8 @@
             if(document.getElementById("ordemServicoForm:dataExecucao") != null)
               document.getElementById("ordemServicoForm:dataExecucao").value = getHoje();
             //Click para voltar busca de OS (Botão "Alterar Outra Ordem de Serviço")
-            else if(document.getElementsByName("j_id_jsp_1084759112_1:j_id_jsp_1084759112_35")[0] != null)
-               setTimeout(function(){ document.getElementsByName("j_id_jsp_1084759112_1:j_id_jsp_1084759112_35")[0].click(); }, 2500);
+            else if(document.getElementsByName("j_id_jsp_1084759112_1:j_id_jsp_1084759112_40")[0] != null)
+               setTimeout(function(){ document.getElementsByName("j_id_jsp_1084759112_1:j_id_jsp_1084759112_40")[0].click(); }, 2500);
          }
       }
 
