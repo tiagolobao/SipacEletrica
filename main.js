@@ -175,7 +175,7 @@
         let d = new Date();
         let dateString = ( d.getDate()<10 ? "0"+d.getDate() : d.getDate() );
         dateString    += "/";
-        dateString    += ( d.getMonth()<10 ? "0"+d.getMonth() : d.getMonth() );
+        dateString    += ( d.getMonth()<10 ? "0"+( d.getMonth() + 1) : d.getMonth() );
         dateString    += "/";
         dateString    += d.getFullYear();
         return dateString;
