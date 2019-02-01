@@ -363,14 +363,14 @@
                     let pageString = request.responseText
                     let page = parser.parseFromString(pageString, "text/html");
                     let response = page.querySelector('div[id="container-popup"] > table > tbody > tr > td > table > tbody > tr:nth-child(5) > td').innerHTML;
-                    response = response.replace(/(\r\n\t|\n|\r\t)/gm,"");
+                    response = response.replace(/[^A-Za-z0-9]/g,"");
                     //Separando OS EM ROTA VISITA das outras
-                    if(response == '		   			EM ROTA VISITA				' || response == '		   			EM EXECUÇÃO				'){
+                    if(response == 'EMROTAVISITA' || response == 'EMEXECUO'){
                        let buffer = sessionStorage.getItem("emRotaVisita");
                        buffer += "," + numOS.replace(/ /g,'');
                        sessionStorage.setItem("emRotaVisita",buffer);
                     }
-                    else if(response == "		   			FINALIZADA				"){
+                    else if(response == 'FINALIZADA' || response == 'AGUARDANDOAVALIAODOREQUISITANTE'){
                       let buffer = sessionStorage.getItem("jaFinalizadas");
                       buffer += "," + numOS.replace(/ /g,'');
                       sessionStorage.setItem("jaFinalizadas",buffer);
@@ -387,8 +387,14 @@
                     let enderecoPaginaAtual = window.location.href; //1
                     let processoFinalizaAuto = sessionStorage.getItem("processoFinalizaAuto"); //2
                     if(enderecoPaginaAtual != enderecoBuscaOsPreBusca && processoFinalizaAuto){
-                       let url = document.querySelector("#conteudo > table > tbody > tr >  td:nth-child(10) > a ").href;
-                       location.href = url;
+                      if(response != 'AGUARDANDOAVALIAODOREQUISITANTE' ){
+                        let url = document.querySelector("#conteudo > table > tbody > tr >  td:nth-child(10) > a ").href;
+                        location.href = url;
+                      } else{ // Nesse caso, o botão de alterar esta bloqueado!!! Então pula o processo de alterar a OS!
+                        console.log("eita");
+                        setTimeout( () => {location.href = enderecoBuscaOsPreBusca} , 2000 );
+                      }
+
                     }
                  } else {
                    // We reached our target server, but it returned an error
